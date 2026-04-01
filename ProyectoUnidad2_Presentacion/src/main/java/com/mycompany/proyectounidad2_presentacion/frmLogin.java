@@ -23,6 +23,7 @@ public class frmLogin extends javax.swing.JFrame {
         initComponents();
         lblRegistro.setText("<html><a href=''>¡Regístrate aquí!</a></html>");
         lblRegistro.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        setLocationRelativeTo(null);
     }
 
     /**

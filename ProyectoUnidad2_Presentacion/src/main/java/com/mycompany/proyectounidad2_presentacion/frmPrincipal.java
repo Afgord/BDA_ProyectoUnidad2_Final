@@ -24,6 +24,7 @@ public class frmPrincipal extends javax.swing.JFrame {
         initComponents();
         this.usuarioActual = usuario;
         lblBienvenida.setText("Bienvenido, " + usuario.getNombre());
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -132,17 +133,15 @@ public class frmPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnMatchesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMatchesActionPerformed
-//        frmMatches frm = new frmMatches(usuarioActual);
-//        frm.setVisible(true);
-//        this.dispose();
-        JOptionPane.showMessageDialog(this, "Aquí irá FrmMatches.");
+        frmMatches frm = new frmMatches(usuarioActual);
+        frm.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnMatchesActionPerformed
 
     private void btnExplorarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExplorarActionPerformed
-//        frmExplorar frm = new frmExplorar(usuarioActual);
-//        frm.setVisible(true);
-//        this.dispose();
-        JOptionPane.showMessageDialog(this, "Aquí irá FrmExplorar.");
+        frmExplorar frm = new frmExplorar(usuarioActual);
+        frm.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnExplorarActionPerformed
 
     private void btnPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPerfilActionPerformed
