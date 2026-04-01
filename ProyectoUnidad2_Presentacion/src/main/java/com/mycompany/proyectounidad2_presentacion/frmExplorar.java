@@ -5,6 +5,7 @@
 package com.mycompany.proyectounidad2_presentacion;
 
 import com.mycompany.proyectounidad2_dominio.Estudiante;
+import com.mycompany.proyectounidad2_dominio.Match;
 import com.mycompany.proyectounidad2_dominio.TipoReaccion;
 import com.mycompany.proyectounidad2_exceptions.NegocioException;
 import com.mycompany.proyectounidad2_servicios.EstudianteService;
@@ -13,7 +14,12 @@ import com.mycompany.proyectounidad2_servicios.IMatchService;
 import com.mycompany.proyectounidad2_servicios.IReaccionService;
 import com.mycompany.proyectounidad2_servicios.MatchService;
 import com.mycompany.proyectounidad2_servicios.ReaccionService;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import javax.swing.JOptionPane;
 
 /**
@@ -232,15 +238,52 @@ public class frmExplorar extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void cargarPerfiles() {
-        perfiles = estudianteService.explorarPerfiles(usuarioActual.getId());
+        try {
+            List<Estudiante> compatibles = estudianteService.buscarConHobbiesEnComun(usuarioActual.getId());
+            List<Estudiante> explorables = estudianteService.explorarPerfiles(usuarioActual.getId());
+            List<Match> matches = matchService.obtenerMatchesDeEstudiante(usuarioActual.getId());
 
-        if (perfiles == null || perfiles.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "No hay perfiles disponibles.");
+            Set<Long> idsConMatch = new HashSet<>();
+            for (Match m : matches) {
+                if (m.getEstudiante1().getId().equals(usuarioActual.getId())) {
+                    idsConMatch.add(m.getEstudiante2().getId());
+                } else {
+                    idsConMatch.add(m.getEstudiante1().getId());
+                }
+            }
+
+            Map<Long, Estudiante> mapa = new LinkedHashMap<>();
+
+            // Primero compatibles
+            for (Estudiante e : compatibles) {
+                if (!idsConMatch.contains(e.getId())) {
+                    mapa.put(e.getId(), e);
+                }
+            }
+
+            // Luego el resto explorables
+            for (Estudiante e : explorables) {
+                if (!idsConMatch.contains(e.getId())) {
+                    mapa.putIfAbsent(e.getId(), e);
+                }
+            }
+
+            perfiles = new ArrayList<>(mapa.values());
+
+            if (perfiles.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "No hay perfiles disponibles.");
+            }
+
+        } catch (NegocioException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
         }
     }
 
     private void mostrarPerfilActual() {
         if (perfiles == null || perfiles.isEmpty()) {
+            lblNombre.setText("Sin perfiles");
+            lblCarrera.setText("");
+            txtDescripcion.setText("");
             return;
         }
 
@@ -250,13 +293,15 @@ public class frmExplorar extends javax.swing.JFrame {
             return;
         }
 
+        if (indiceActual < 0) {
+            indiceActual = 0;
+        }
+
         Estudiante e = perfiles.get(indiceActual);
 
         lblNombre.setText(e.getNombre() + " " + e.getApPat());
         lblCarrera.setText(e.getCarrera());
-        txtDescripcion.setText(
-                e.getDescripcion() != null ? e.getDescripcion() : ""
-        );
+        txtDescripcion.setText(e.getDescripcion() != null ? e.getDescripcion() : "");
     }
 
     private void reaccionar(TipoReaccion tipo) {
@@ -295,5 +340,4 @@ public class frmExplorar extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
     }
-
 }

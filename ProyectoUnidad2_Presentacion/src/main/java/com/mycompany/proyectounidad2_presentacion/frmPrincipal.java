@@ -145,10 +145,9 @@ public class frmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnExplorarActionPerformed
 
     private void btnPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPerfilActionPerformed
-//        frmPerfil frm = new frmPerfil(usuarioActual);
-//        frm.setVisible(true);
-//        this.dispose();
-        JOptionPane.showMessageDialog(this, "Aquí irá FrmPerfil.");
+        frmPerfil frm = new frmPerfil(usuarioActual);
+        frm.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnPerfilActionPerformed
 
     private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
