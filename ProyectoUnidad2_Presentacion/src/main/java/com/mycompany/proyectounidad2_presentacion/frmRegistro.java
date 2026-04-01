@@ -15,6 +15,8 @@ import javax.swing.JOptionPane;
  */
 public class frmRegistro extends javax.swing.JFrame {
 
+    private String fotoSeleccionada = "default.jpg";
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(frmRegistro.class.getName());
 
     /**
@@ -23,6 +25,18 @@ public class frmRegistro extends javax.swing.JFrame {
     public frmRegistro() {
         initComponents();
         setLocationRelativeTo(null);
+        lblFoto.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblFoto.setVerticalAlignment(javax.swing.SwingConstants.CENTER);
+        lblFoto.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        lblFoto.setPreferredSize(new java.awt.Dimension(100, 100));
+        lblFoto.setMinimumSize(new java.awt.Dimension(100, 100));
+        lblFoto.setMaximumSize(new java.awt.Dimension(100, 100));
+
+        lblCambiarFoto.setText("<html><u>Cambiar foto</u></html>");
+        lblCambiarFoto.setForeground(new java.awt.Color(0, 102, 204));
+        lblCambiarFoto.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+        cargarFotoPerfil(fotoSeleccionada);
     }
 
     /**
@@ -53,12 +67,13 @@ public class frmRegistro extends javax.swing.JFrame {
         txtContrasena = new javax.swing.JPasswordField();
         txtConfirmarContrasena = new javax.swing.JPasswordField();
         txtCarrera = new javax.swing.JTextField();
-        txtFoto = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtDescripcion = new javax.swing.JTextArea();
         btnRegistrar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         jLabel11 = new javax.swing.JLabel();
+        lblFoto = new javax.swing.JLabel();
+        lblCambiarFoto = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -119,69 +134,95 @@ public class frmRegistro extends javax.swing.JFrame {
         jLabel11.setFont(new java.awt.Font("Segoe UI", 2, 10)); // NOI18N
         jLabel11.setText("La contraseña debe tener al menos 6 caracteres, una mayúscula, una minúscula y un número");
 
+        lblFoto.setText("Foto");
+
+        lblCambiarFoto.setText("Cambiar foto");
+        lblCambiarFoto.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblCambiarFotoMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(24, 24, 24)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel7)
-                            .addComponent(jLabel8)
-                            .addComponent(jLabel9)
-                            .addComponent(jLabel10))
+                        .addGap(116, 116, 116)
+                        .addComponent(btnRegistrar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(txtFoto, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtCarrera, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtConfirmarContrasena, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)))
+                        .addComponent(btnCancelar))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel6))
-                        .addGap(34, 34, 34)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtNombre)
-                            .addComponent(txtApPat)
-                            .addComponent(txtApMat)
-                            .addComponent(txtCorreo)
-                            .addComponent(txtContrasena, javax.swing.GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE)))
-                    .addComponent(jLabel11)))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(116, 116, 116)
-                .addComponent(btnRegistrar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnCancelar))
+                        .addGap(24, 24, 24)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel7)
+                                    .addComponent(jLabel8)
+                                    .addComponent(jLabel10))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(txtCarrera, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtConfirmarContrasena, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel6)
+                                            .addComponent(jLabel5)
+                                            .addComponent(jLabel4)
+                                            .addComponent(jLabel3)
+                                            .addComponent(jLabel2))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                        .addComponent(jLabel9)
+                                        .addGap(54, 54, 54)))
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtContrasena, javax.swing.GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE)
+                                    .addComponent(txtCorreo)
+                                    .addComponent(txtApMat)
+                                    .addComponent(txtApPat)
+                                    .addComponent(txtNombre)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addComponent(lblFoto)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(lblCambiarFoto)
+                                        .addGap(56, 56, 56))))))
+                    .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(36, 36, 36)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(txtApPat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addComponent(txtApMat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5)
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(lblFoto)
+                    .addComponent(lblCambiarFoto))
+                .addGap(35, 35, 35)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(txtApPat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(txtApMat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel5))
                     .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel6)
-                    .addComponent(txtContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(txtContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel11)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -193,10 +234,6 @@ public class frmRegistro extends javax.swing.JFrame {
                     .addComponent(txtCarrera, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9)
-                    .addComponent(txtFoto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel10))
@@ -238,7 +275,9 @@ public class frmRegistro extends javax.swing.JFrame {
             String password = new String(txtContrasena.getPassword()).trim();
             String confirmar = new String(txtConfirmarContrasena.getPassword()).trim();
             String carrera = txtCarrera.getText().trim();
-            String fotoPerfil = txtFoto.getText().trim();
+            String foto = (fotoSeleccionada == null || fotoSeleccionada.isBlank())
+                    ? "default.jpg"
+                    : fotoSeleccionada;
             String descripcion = txtDescripcion.getText().trim();
 
             if (nombre.isBlank() || apPat.isBlank() || apMat.isBlank()
@@ -257,10 +296,6 @@ public class frmRegistro extends javax.swing.JFrame {
                 return;
             }
 
-            if (fotoPerfil.isBlank()) {
-                fotoPerfil = "fotos/default.jpg";
-            }
-
             if (!correo.endsWith("@potros.itson.edu.mx")) {
                 JOptionPane.showMessageDialog(this, "Debe usar correo institucional.");
                 return;
@@ -273,7 +308,7 @@ public class frmRegistro extends javax.swing.JFrame {
             estudiante.setCorreoInst(correo);
             estudiante.setPassword(password);
             estudiante.setCarrera(carrera);
-            estudiante.setFotoPerfil(fotoPerfil);
+            estudiante.setFotoPerfil(foto);
             estudiante.setDescripcion(descripcion);
 
             EstudianteService service = new EstudianteService();
@@ -308,30 +343,68 @@ public class frmRegistro extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtConfirmarContrasenaActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-         */
+    private void lblCambiarFotoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblCambiarFotoMouseClicked
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+            java.io.File carpetaInicial = new java.io.File(
+                    "src/main/resources/imagenes/perfiles"
+            );
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new frmRegistro().setVisible(true));
-    }
+            javax.swing.JFileChooser fileChooser = new javax.swing.JFileChooser(carpetaInicial);
+            fileChooser.setDialogTitle("Seleccionar imagen");
+
+            fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter(
+                    "Imágenes", "jpg", "jpeg", "png"
+            ));
+
+            int resultado = fileChooser.showOpenDialog(this);
+
+            if (resultado == javax.swing.JFileChooser.APPROVE_OPTION) {
+                java.io.File archivo = fileChooser.getSelectedFile();
+
+                java.io.File carpetaDestino = new java.io.File(
+                        "src/main/resources/imagenes/perfiles"
+                );
+
+                String rutaArchivo = archivo.getCanonicalPath();
+                String rutaCarpetaDestino = carpetaDestino.getCanonicalPath();
+
+                if (archivo.getName().equals(fotoSeleccionada)) {
+                    cargarFotoPerfilDesdeArchivo(archivo);
+                    return;
+                }
+
+                if (archivo.getParentFile() != null
+                        && archivo.getParentFile().getCanonicalPath().equals(rutaCarpetaDestino)) {
+
+                    fotoSeleccionada = archivo.getName();
+                    cargarFotoPerfilDesdeArchivo(archivo);
+                    return;
+                }
+
+                String nombreOriginal = archivo.getName().replaceAll("\\s+", "_");
+                String timestamp = java.time.LocalDateTime.now().format(
+                        java.time.format.DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")
+                );
+                String nombreArchivo = timestamp + "_" + nombreOriginal;
+
+                java.nio.file.Path destino = java.nio.file.Paths.get(
+                        rutaCarpetaDestino, nombreArchivo
+                );
+
+                java.nio.file.Files.copy(
+                        archivo.toPath(),
+                        destino,
+                        java.nio.file.StandardCopyOption.REPLACE_EXISTING
+                );
+
+                fotoSeleccionada = nombreArchivo;
+                cargarFotoPerfilDesdeArchivo(destino.toFile());
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar imagen");
+        }
+    }//GEN-LAST:event_lblCambiarFotoMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
@@ -350,6 +423,8 @@ public class frmRegistro extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblCambiarFoto;
+    private javax.swing.JLabel lblFoto;
     private javax.swing.JTextField txtApMat;
     private javax.swing.JTextField txtApPat;
     private javax.swing.JTextField txtCarrera;
@@ -357,7 +432,58 @@ public class frmRegistro extends javax.swing.JFrame {
     private javax.swing.JPasswordField txtContrasena;
     private javax.swing.JTextField txtCorreo;
     private javax.swing.JTextArea txtDescripcion;
-    private javax.swing.JTextField txtFoto;
     private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables
+
+    private void cargarFotoPerfil(String nombreArchivo) {
+        try {
+            if (nombreArchivo == null || nombreArchivo.isBlank()) {
+                nombreArchivo = "default.jpg";
+            }
+
+            java.net.URL url = getClass().getResource("/imagenes/perfiles/" + nombreArchivo);
+
+            if (url == null) {
+                url = getClass().getResource("/imagenes/perfiles/default.jpg");
+            }
+
+            javax.swing.ImageIcon iconoOriginal = new javax.swing.ImageIcon(url);
+            java.awt.Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(
+                    100, 100, java.awt.Image.SCALE_SMOOTH
+            );
+
+            lblFoto.setIcon(new javax.swing.ImageIcon(imagenEscalada));
+            lblFoto.setText("");
+
+        } catch (Exception e) {
+            lblFoto.setIcon(null);
+            lblFoto.setText("Sin foto");
+        }
+
+        lblFoto.revalidate();
+        lblFoto.repaint();
+        pack();
+        setLocationRelativeTo(null);
+    }
+
+    private void cargarFotoPerfilDesdeArchivo(java.io.File archivo) {
+        try {
+            javax.swing.ImageIcon iconoOriginal = new javax.swing.ImageIcon(archivo.getAbsolutePath());
+            java.awt.Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(
+                    100, 100, java.awt.Image.SCALE_SMOOTH
+            );
+
+            lblFoto.setIcon(new javax.swing.ImageIcon(imagenEscalada));
+            lblFoto.setText("");
+
+        } catch (Exception e) {
+            lblFoto.setIcon(null);
+            lblFoto.setText("Sin foto");
+        }
+
+        lblFoto.revalidate();
+        lblFoto.repaint();
+        pack();
+        setLocationRelativeTo(null);
+    }
 }

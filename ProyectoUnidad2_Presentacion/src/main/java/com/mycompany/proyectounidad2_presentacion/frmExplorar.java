@@ -5,6 +5,7 @@
 package com.mycompany.proyectounidad2_presentacion;
 
 import com.mycompany.proyectounidad2_dominio.Estudiante;
+import com.mycompany.proyectounidad2_dominio.Hobby;
 import com.mycompany.proyectounidad2_dominio.Match;
 import com.mycompany.proyectounidad2_dominio.TipoReaccion;
 import com.mycompany.proyectounidad2_exceptions.NegocioException;
@@ -20,6 +21,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 /**
@@ -44,6 +47,40 @@ public class frmExplorar extends javax.swing.JFrame {
     public frmExplorar(Estudiante usuario) {
         initComponents();
         this.usuarioActual = usuario;
+
+        txtHobbies.setLineWrap(true);
+        txtHobbies.setWrapStyleWord(true);
+        txtHobbies.setEditable(false);
+        txtHobbies.setOpaque(false);
+
+        btnAnterior.setIcon(cargarIcono("/imagenes/iconos/flecha_izquierda.png"));
+        btnAnterior.setText("");
+        btnAnterior.setBorderPainted(false);
+        btnAnterior.setContentAreaFilled(false);
+
+        btnSiguiente.setIcon(cargarIcono("/imagenes/iconos/flecha_derecha.png"));
+        btnSiguiente.setText("");
+        btnSiguiente.setBorderPainted(false);
+        btnSiguiente.setContentAreaFilled(false);
+
+        btnLike.setIcon(cargarIcono("/imagenes/iconos/like.png"));
+        btnLike.setText("LIKE");
+        btnLike.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnLike.setIconTextGap(10);
+        btnLike.setBackground(new java.awt.Color(76, 175, 80)); // verde
+        btnLike.setForeground(java.awt.Color.WHITE);
+
+        btnNoInteresa.setIcon(cargarIcono("/imagenes/iconos/dislike.png"));
+        btnNoInteresa.setText("NO ME INTERESA");
+        btnNoInteresa.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnNoInteresa.setIconTextGap(10);
+        btnNoInteresa.setBackground(new java.awt.Color(244, 67, 54)); // rojo
+        btnNoInteresa.setForeground(java.awt.Color.WHITE);
+
+        lblFoto.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblFoto.setVerticalAlignment(javax.swing.SwingConstants.CENTER);
+        lblFoto.setPreferredSize(new java.awt.Dimension(120, 120));
+        lblFoto.setMinimumSize(new java.awt.Dimension(120, 120));
 
         cargarPerfiles();
         mostrarPerfilActual();
@@ -72,6 +109,9 @@ public class frmExplorar extends javax.swing.JFrame {
         btnLike = new javax.swing.JButton();
         btnNoInteresa = new javax.swing.JButton();
         btnSiguiente = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        txtHobbies = new javax.swing.JTextArea();
         btnSalir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -103,6 +143,12 @@ public class frmExplorar extends javax.swing.JFrame {
         btnSiguiente.setText("Siguiente");
         btnSiguiente.addActionListener(this::btnSiguienteActionPerformed);
 
+        jLabel2.setText("Hobbies");
+
+        txtHobbies.setColumns(20);
+        txtHobbies.setRows(5);
+        jScrollPane2.setViewportView(txtHobbies);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -111,25 +157,32 @@ public class frmExplorar extends javax.swing.JFrame {
                 .addGap(20, 20, 20)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(btnAnterior)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnLike)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnNoInteresa)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnSiguiente)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel4)
                             .addComponent(lblCarrera))
-                        .addContainerGap(26, Short.MAX_VALUE))
+                        .addContainerGap(365, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(lblNombre)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(lblFoto)
-                        .addGap(126, 126, 126))))
+                        .addGap(126, 126, 126))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(btnAnterior)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnLike)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnNoInteresa)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnSiguiente)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane2))
+                        .addContainerGap())))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -143,14 +196,18 @@ public class frmExplorar extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(34, 34, 34)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAnterior)
                     .addComponent(btnLike)
                     .addComponent(btnNoInteresa)
                     .addComponent(btnSiguiente))
-                .addContainerGap(50, Short.MAX_VALUE))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
 
         btnSalir.setText("Regresar");
@@ -227,14 +284,17 @@ public class frmExplorar extends javax.swing.JFrame {
     private javax.swing.JButton btnSalir;
     private javax.swing.JButton btnSiguiente;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblCarrera;
     private javax.swing.JLabel lblFoto;
     private javax.swing.JLabel lblNombre;
     private javax.swing.JTextArea txtDescripcion;
+    private javax.swing.JTextArea txtHobbies;
     // End of variables declaration//GEN-END:variables
 
     private void cargarPerfiles() {
@@ -284,6 +344,7 @@ public class frmExplorar extends javax.swing.JFrame {
             lblNombre.setText("Sin perfiles");
             lblCarrera.setText("");
             txtDescripcion.setText("");
+            txtHobbies.setText("");
             return;
         }
 
@@ -299,11 +360,61 @@ public class frmExplorar extends javax.swing.JFrame {
 
         Estudiante e = perfiles.get(indiceActual);
 
-        lblNombre.setText(e.getNombre() + " " + e.getApPat());
-        lblCarrera.setText(e.getCarrera());
-        txtDescripcion.setText(e.getDescripcion() != null ? e.getDescripcion() : "");
+        // Traer detalle con hobbies
+        Estudiante detalle = estudianteService.buscarPorIdConHobbies(e.getId());
+
+        lblNombre.setText(detalle.getNombre() + " " + detalle.getApPat());
+        lblCarrera.setText(detalle.getCarrera());
+        txtDescripcion.setText(detalle.getDescripcion() != null ? detalle.getDescripcion() : "");
+
+        String hobbiesTexto = detalle.getHobbies().isEmpty()
+                ? "Sin hobbies registrados"
+                : detalle.getHobbies().stream()
+                        .map(Hobby::getNombre)
+                        .sorted()
+                        .collect(Collectors.joining(", "));
+
+        txtHobbies.setText(hobbiesTexto);
+
+        cargarFotoPerfil(detalle.getFotoPerfil());
     }
 
+//    private void reaccionar(TipoReaccion tipo) {
+//        if (perfiles == null || perfiles.isEmpty()) {
+//            return;
+//        }
+//
+//        Estudiante receptor = perfiles.get(indiceActual);
+//
+//        try {
+//            if (tipo == TipoReaccion.LIKE) {
+//                int matchesAntes = matchService
+//                        .obtenerMatchesDeEstudiante(usuarioActual.getId())
+//                        .size();
+//
+//                reaccionService.registrarReaccion(usuarioActual, receptor, tipo);
+//
+//                int matchesDespues = matchService
+//                        .obtenerMatchesDeEstudiante(usuarioActual.getId())
+//                        .size();
+//
+//                if (matchesDespues > matchesAntes) {
+//                    JOptionPane.showMessageDialog(this, "💥 ¡ES UN MATCH!");
+//                } else {
+//                    JOptionPane.showMessageDialog(this, "Te gusta este perfil");
+//                }
+//
+//            } else {
+//                reaccionService.registrarReaccion(usuarioActual, receptor, tipo);
+//            }
+//
+//            indiceActual++;
+//            mostrarPerfilActual();
+//
+//        } catch (NegocioException e) {
+//            JOptionPane.showMessageDialog(this, e.getMessage());
+//        }
+//    }
     private void reaccionar(TipoReaccion tipo) {
         if (perfiles == null || perfiles.isEmpty()) {
             return;
@@ -333,11 +444,70 @@ public class frmExplorar extends javax.swing.JFrame {
                 reaccionService.registrarReaccion(usuarioActual, receptor, tipo);
             }
 
-            indiceActual++;
+            // 🔥 volver a cargar perfiles desde BD
+            cargarPerfiles();
+
+            // si ya no hay perfiles, mostrar estado vacío
+            if (perfiles == null || perfiles.isEmpty()) {
+                indiceActual = 0;
+                mostrarPerfilActual();
+                return;
+            }
+
+            // mantener índice dentro de rango
+            if (indiceActual >= perfiles.size()) {
+                indiceActual = perfiles.size() - 1;
+            }
+
             mostrarPerfilActual();
 
         } catch (NegocioException e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
     }
+
+    private void cargarFotoPerfil(String nombreArchivo) {
+        try {
+            if (nombreArchivo == null || nombreArchivo.isBlank()) {
+                nombreArchivo = "default.jpg";
+            }
+
+            java.net.URL url = getClass().getResource("/imagenes/perfiles/" + nombreArchivo);
+
+            if (url == null) {
+                url = getClass().getResource("/imagenes/perfiles/default.jpg");
+            }
+
+            ImageIcon iconoOriginal = new ImageIcon(url);
+            java.awt.Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(
+                    100, 100, java.awt.Image.SCALE_SMOOTH
+            );
+
+            lblFoto.setIcon(new ImageIcon(imagenEscalada));
+            lblFoto.setText("");
+
+        } catch (Exception e) {
+            lblFoto.setIcon(null);
+            lblFoto.setText("Sin foto");
+        }
+
+        lblFoto.revalidate();
+        lblFoto.repaint();
+        pack();
+        setLocationRelativeTo(null);
+    }
+
+    private ImageIcon cargarIcono(String ruta) {
+        java.net.URL url = getClass().getResource(ruta);
+
+        if (url == null) {
+            System.out.println("No se encontró: " + ruta);
+            return null;
+        }
+
+        ImageIcon icono = new ImageIcon(url);
+        java.awt.Image img = icono.getImage().getScaledInstance(32, 32, java.awt.Image.SCALE_SMOOTH);
+        return new ImageIcon(img);
+    }
+
 }

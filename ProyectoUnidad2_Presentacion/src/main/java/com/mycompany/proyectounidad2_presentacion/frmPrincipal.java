@@ -5,6 +5,7 @@
 package com.mycompany.proyectounidad2_presentacion;
 
 import com.mycompany.proyectounidad2_dominio.Estudiante;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 /**
@@ -25,6 +26,29 @@ public class frmPrincipal extends javax.swing.JFrame {
         this.usuarioActual = usuario;
         lblBienvenida.setText("Bienvenido, " + usuario.getNombre());
         setLocationRelativeTo(null);
+
+        cargarFotoPerfil(usuario.getFotoPerfil());
+        lblFoto.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblFoto.setVerticalAlignment(javax.swing.SwingConstants.CENTER);
+        lblFoto.setPreferredSize(new java.awt.Dimension(80, 80));
+        lblFoto.setMinimumSize(new java.awt.Dimension(80, 80));
+
+        btnExplorar.setIcon(cargarIcono("/imagenes/iconos/explorar.png"));
+        btnExplorar.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnExplorar.setIconTextGap(15);
+
+        btnMatches.setIcon(cargarIcono("/imagenes/iconos/matches.jpg"));
+        btnMatches.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnMatches.setIconTextGap(15);
+
+        btnPerfil.setIcon(cargarIcono("/imagenes/iconos/perfil.jpg"));
+        btnPerfil.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnPerfil.setIconTextGap(15);
+
+        btnCerrarSesion.setIcon(cargarIcono("/imagenes/iconos/logout.png"));
+        btnCerrarSesion.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnCerrarSesion.setIconTextGap(15);
+
     }
 
     /**
@@ -38,6 +62,7 @@ public class frmPrincipal extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         lblBienvenida = new javax.swing.JLabel();
+        lblFoto = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         btnExplorar = new javax.swing.JButton();
         btnMatches = new javax.swing.JButton();
@@ -46,8 +71,14 @@ public class frmPrincipal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        lblBienvenida.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        lblBienvenida.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         lblBienvenida.setText("Bienvenido,");
+
+        lblFoto.setText("Foto");
+        lblFoto.setMaximumSize(new java.awt.Dimension(80, 80));
+        lblFoto.setMinimumSize(new java.awt.Dimension(100, 100));
+        lblFoto.setOpaque(true);
+        lblFoto.setPreferredSize(new java.awt.Dimension(80, 80));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -55,30 +86,34 @@ public class frmPrincipal extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(26, 26, 26)
-                .addComponent(lblBienvenida, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblBienvenida, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblFoto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(20, Short.MAX_VALUE)
-                .addComponent(lblBienvenida)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblBienvenida)
+                    .addComponent(lblFoto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(19, 19, 19))
         );
 
-        btnExplorar.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        btnExplorar.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         btnExplorar.setText("Explorar Perfiles");
         btnExplorar.addActionListener(this::btnExplorarActionPerformed);
 
-        btnMatches.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        btnMatches.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         btnMatches.setText("Mis matches");
         btnMatches.addActionListener(this::btnMatchesActionPerformed);
 
-        btnPerfil.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        btnPerfil.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         btnPerfil.setText("Mi perfil");
         btnPerfil.addActionListener(this::btnPerfilActionPerformed);
 
-        btnCerrarSesion.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        btnCerrarSesion.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         btnCerrarSesion.setText("Cerrar Sesión");
         btnCerrarSesion.addActionListener(this::btnCerrarSesionActionPerformed);
 
@@ -87,18 +122,18 @@ public class frmPrincipal extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(95, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnExplorar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnMatches, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnPerfil, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnCerrarSesion, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(83, 83, 83))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(btnCerrarSesion, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
+                    .addComponent(btnPerfil, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
+                    .addComponent(btnMatches, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
+                    .addComponent(btnExplorar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(48, 48, 48))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGap(20, 20, 20)
                 .addComponent(btnExplorar)
                 .addGap(18, 18, 18)
                 .addComponent(btnMatches)
@@ -106,7 +141,7 @@ public class frmPrincipal extends javax.swing.JFrame {
                 .addComponent(btnPerfil)
                 .addGap(18, 18, 18)
                 .addComponent(btnCerrarSesion)
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(41, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -115,18 +150,18 @@ public class frmPrincipal extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 414, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -176,5 +211,44 @@ public class frmPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lblBienvenida;
+    private javax.swing.JLabel lblFoto;
     // End of variables declaration//GEN-END:variables
+
+    private void cargarFotoPerfil(String nombreArchivo) {
+        try {
+            if (nombreArchivo == null || nombreArchivo.isBlank()) {
+                nombreArchivo = "default.jpg";
+            }
+
+            java.net.URL url = getClass().getResource("/imagenes/perfiles/" + nombreArchivo);
+
+            if (url == null) {
+                url = getClass().getResource("/imagenes/perfiles/default.jpg");
+            }
+
+            ImageIcon iconoOriginal = new ImageIcon(url);
+            java.awt.Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(
+                    100, 100, java.awt.Image.SCALE_SMOOTH
+            );
+
+            lblFoto.setIcon(new ImageIcon(imagenEscalada));
+            lblFoto.setText("");
+
+        } catch (Exception e) {
+            lblFoto.setIcon(null);
+            lblFoto.setText("Sin foto");
+        }
+
+        lblFoto.revalidate();
+        lblFoto.repaint();
+        pack();
+        setLocationRelativeTo(null);
+
+    }
+
+    private ImageIcon cargarIcono(String ruta) {
+        ImageIcon icono = new ImageIcon(getClass().getResource(ruta));
+        java.awt.Image img = icono.getImage().getScaledInstance(32, 32, java.awt.Image.SCALE_SMOOTH);
+        return new ImageIcon(img);
+    }
 }

@@ -13,6 +13,7 @@ import com.mycompany.proyectounidad2_servicios.IEstudianteService;
 import com.mycompany.proyectounidad2_servicios.IHobbyService;
 import java.util.List;
 import java.util.Set;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -25,6 +26,7 @@ public class frmPerfil extends javax.swing.JFrame {
     private Estudiante usuarioActual;
     private IEstudianteService estudianteService = new EstudianteService();
     private IHobbyService hobbyService = new HobbyService();
+    private String fotoSeleccionada;
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(frmPerfil.class.getName());
 
@@ -36,8 +38,18 @@ public class frmPerfil extends javax.swing.JFrame {
         txtDescripcion.setLineWrap(true);
         txtDescripcion.setWrapStyleWord(true);
         this.usuarioActual = usuario;
+        this.fotoSeleccionada = usuario.getFotoPerfil();
         setLocationRelativeTo(null);
+        lblFoto.setPreferredSize(new java.awt.Dimension(100, 100));
+        lblFoto.setMinimumSize(new java.awt.Dimension(100, 100));
+        lblFoto.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblFoto.setVerticalAlignment(javax.swing.SwingConstants.CENTER);
+        lblFoto.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        lblCambiarFoto.setText("<html><u>Cambiar foto</u></html>");
+        lblCambiarFoto.setForeground(new java.awt.Color(0, 102, 204));
+        lblCambiarFoto.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
+        ocultarColumnaIdHobbies();
         cargarDatosPerfil();
     }
 
@@ -52,7 +64,8 @@ public class frmPerfil extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         lblTitulo = new javax.swing.JLabel();
-        txtFoto = new javax.swing.JTextField();
+        lblFoto = new javax.swing.JLabel();
+        lblCambiarFoto = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         lblNombre = new javax.swing.JLabel();
         lblApPat = new javax.swing.JLabel();
@@ -79,7 +92,14 @@ public class frmPerfil extends javax.swing.JFrame {
         lblTitulo.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         lblTitulo.setText("PERFIL DE");
 
-        txtFoto.setText("Foto");
+        lblFoto.setText("Foto");
+
+        lblCambiarFoto.setText("Cambiar Foto");
+        lblCambiarFoto.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblCambiarFotoMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -89,8 +109,12 @@ public class frmPerfil extends javax.swing.JFrame {
                 .addGap(19, 19, 19)
                 .addComponent(lblTitulo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(txtFoto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(41, 41, 41))
+                .addComponent(lblFoto)
+                .addGap(50, 50, 50))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblCambiarFoto)
+                .addGap(23, 23, 23))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -98,8 +122,10 @@ public class frmPerfil extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTitulo)
-                    .addComponent(txtFoto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(34, Short.MAX_VALUE))
+                    .addComponent(lblFoto))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addComponent(lblCambiarFoto)
+                .addContainerGap())
         );
 
         lblNombre.setText("Nombre");
@@ -297,7 +323,6 @@ public class frmPerfil extends javax.swing.JFrame {
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         try {
             String carrera = txtCarrera.getText().trim();
-            String foto = txtFoto.getText().trim();
             String descripcion = txtDescripcion.getText().trim();
 
             if (carrera.isBlank()) {
@@ -305,8 +330,13 @@ public class frmPerfil extends javax.swing.JFrame {
                 return;
             }
 
-            if (foto.isBlank()) {
-                foto = "fotos/default.jpg";
+//            String foto = usuarioActual.getFotoPerfil();
+            String foto = (fotoSeleccionada == null || fotoSeleccionada.isBlank())
+                    ? "default.jpg"
+                    : fotoSeleccionada;
+
+            if (foto == null || foto.isBlank()) {
+                foto = "default.jpg";
             }
 
             Estudiante actualizado = estudianteService.actualizarPerfil(
@@ -317,6 +347,7 @@ public class frmPerfil extends javax.swing.JFrame {
             );
 
             this.usuarioActual = actualizado;
+            this.fotoSeleccionada = actualizado.getFotoPerfil();
 
             JOptionPane.showMessageDialog(this, "Perfil actualizado correctamente.");
             cargarDatosPerfil();
@@ -375,7 +406,8 @@ public class frmPerfil extends javax.swing.JFrame {
             return;
         }
 
-        Long idHobby = (Long) tblHobbies.getValueAt(fila, 0);
+        //Long idHobby = (Long) tblHobbies.getValueAt(fila, 0);
+        Long idHobby = (Long) tblHobbies.getModel().getValueAt(fila, 0);
 
         try {
             estudianteService.quitarHobby(usuarioActual.getId(), idHobby);
@@ -413,6 +445,50 @@ public class frmPerfil extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnNuevoHobbyActionPerformed
 
+    private void lblCambiarFotoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblCambiarFotoMouseClicked
+        try {
+
+            java.io.File carpetaInicial = new java.io.File(
+                    "src/main/resources/imagenes/perfiles"
+            );
+
+            javax.swing.JFileChooser fileChooser = new javax.swing.JFileChooser(carpetaInicial);
+            fileChooser.setDialogTitle("Seleccionar imagen");
+
+            // Filtro solo imágenes
+            fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter(
+                    "Imágenes", "jpg", "jpeg", "png"
+            ));
+
+            int resultado = fileChooser.showOpenDialog(this);
+
+            if (resultado == javax.swing.JFileChooser.APPROVE_OPTION) {
+                java.io.File archivo = fileChooser.getSelectedFile();
+
+                String nombreArchivo = archivo.getName();
+
+                // 🔥 IMPORTANTE: copiar a resources (simplificado)
+                java.nio.file.Path destino = java.nio.file.Paths.get(
+                        "src/main/resources/imagenes/perfiles/" + nombreArchivo
+                );
+
+                java.nio.file.Files.copy(
+                        archivo.toPath(),
+                        destino,
+                        java.nio.file.StandardCopyOption.REPLACE_EXISTING
+                );
+
+//                usuarioActual.setFotoPerfil(nombreArchivo);
+//                cargarFotoPerfil(nombreArchivo);
+                fotoSeleccionada = nombreArchivo;
+                cargarFotoPerfil(fotoSeleccionada);
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar imagen");
+        }
+    }//GEN-LAST:event_lblCambiarFotoMouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarHobbie;
     private javax.swing.JButton btnGuardar;
@@ -428,15 +504,16 @@ public class frmPerfil extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblApMat;
     private javax.swing.JLabel lblApPat;
+    private javax.swing.JLabel lblCambiarFoto;
     private javax.swing.JLabel lblCarrera;
     private javax.swing.JLabel lblCorreo;
     private javax.swing.JLabel lblDescripcion;
+    private javax.swing.JLabel lblFoto;
     private javax.swing.JLabel lblNombre;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JTable tblHobbies;
     private javax.swing.JTextField txtCarrera;
     private javax.swing.JTextArea txtDescripcion;
-    private javax.swing.JTextField txtFoto;
     // End of variables declaration//GEN-END:variables
 
     private void cargarDatosPerfil() {
@@ -450,11 +527,16 @@ public class frmPerfil extends javax.swing.JFrame {
             lblCorreo.setText(actualizado.getCorreoInst());
 
             txtCarrera.setText(actualizado.getCarrera() != null ? actualizado.getCarrera() : "");
-            txtFoto.setText(actualizado.getFotoPerfil() != null ? actualizado.getFotoPerfil() : "");
             txtDescripcion.setText(actualizado.getDescripcion() != null ? actualizado.getDescripcion() : "");
 
             lblTitulo.setText("PERFIL DE " + actualizado.getNombre());
 
+            //cargarFotoPerfil(actualizado.getFotoPerfil());
+            String fotoAMostrar = (fotoSeleccionada == null || fotoSeleccionada.isBlank())
+                    ? actualizado.getFotoPerfil()
+                    : fotoSeleccionada;
+
+            cargarFotoPerfil(fotoAMostrar);
             cargarHobbies();
             cargarComboHobbies();
 
@@ -507,4 +589,43 @@ public class frmPerfil extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }
+
+    private void ocultarColumnaIdHobbies() {
+        tblHobbies.getColumnModel().getColumn(0).setMinWidth(0);
+        tblHobbies.getColumnModel().getColumn(0).setMaxWidth(0);
+        tblHobbies.getColumnModel().getColumn(0).setPreferredWidth(0);
+    }
+
+    private void cargarFotoPerfil(String nombreArchivo) {
+        try {
+            if (nombreArchivo == null || nombreArchivo.isBlank()) {
+                nombreArchivo = "default.jpg";
+            }
+
+            java.net.URL url = getClass().getResource("/imagenes/perfiles/" + nombreArchivo);
+
+            if (url == null) {
+                url = getClass().getResource("/imagenes/perfiles/default.jpg");
+            }
+
+            ImageIcon iconoOriginal = new ImageIcon(url);
+            java.awt.Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(
+                    100, 100, java.awt.Image.SCALE_SMOOTH
+            );
+
+            lblFoto.setIcon(new ImageIcon(imagenEscalada));
+            lblFoto.setText("");
+
+        } catch (Exception e) {
+            lblFoto.setIcon(null);
+            lblFoto.setText("Sin foto");
+        }
+
+        lblFoto.revalidate();
+        lblFoto.repaint();
+        pack();
+        setLocationRelativeTo(null);
+
+    }
+
 }

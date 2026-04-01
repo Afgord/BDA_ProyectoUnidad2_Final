@@ -74,8 +74,13 @@
                   <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
                   <Component id="lblTitulo" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
-                  <Component id="txtFoto" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
+                  <Component id="lblFoto" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
+              </Group>
+              <Group type="102" alignment="1" attributes="0">
+                  <EmptySpace max="32767" attributes="0"/>
+                  <Component id="lblCambiarFoto" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -85,9 +90,11 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="lblTitulo" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="txtFoto" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblFoto" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="34" max="32767" attributes="0"/>
+                  <EmptySpace pref="12" max="32767" attributes="0"/>
+                  <Component id="lblCambiarFoto" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -101,10 +108,18 @@
             <Property name="text" type="java.lang.String" value="PERFIL DE"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="txtFoto">
+        <Component class="javax.swing.JLabel" name="lblFoto">
           <Properties>
             <Property name="text" type="java.lang.String" value="Foto"/>
           </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblCambiarFoto">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Cambiar Foto"/>
+          </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lblCambiarFotoMouseClicked"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
