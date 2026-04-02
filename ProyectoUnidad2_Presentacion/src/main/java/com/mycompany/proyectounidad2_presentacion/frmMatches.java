@@ -170,6 +170,8 @@ public class frmMatches extends javax.swing.JFrame {
 
         } catch (NegocioException e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Ocurrió un error inesperado al cargar los matches.");
         }
     }
 }

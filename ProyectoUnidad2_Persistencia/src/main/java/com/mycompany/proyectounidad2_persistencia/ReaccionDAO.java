@@ -65,10 +65,37 @@ public class ReaccionDAO implements IReaccionDAO {
           )
         """;
 
-        return em.createQuery(jpql, Estudiante.class)
-                .setParameter("idReceptor", idReceptor)
-                .setParameter("tipoLike", TipoReaccion.LIKE)
-                .getResultList();
+        TypedQuery<Estudiante> query = em.createQuery(jpql, Estudiante.class);
+        query.setParameter("idReceptor", idReceptor);
+        query.setParameter("tipoLike", TipoReaccion.LIKE);
+        query.setMaxResults(100);
+
+        return query.getResultList();
+    }
+
+    @Override
+    public Reaccion buscarPorId(Long id) {
+        return em.find(Reaccion.class, id);
+    }
+
+    @Override
+    public List<Reaccion> listar() {
+        String jpql = """
+        SELECT r
+        FROM Reaccion r
+        """;
+
+        TypedQuery<Reaccion> query = em.createQuery(jpql, Reaccion.class);
+        query.setMaxResults(100);
+
+        return query.getResultList();
+    }
+
+    @Override
+    public Reaccion eliminar(Reaccion reaccion) {
+        reaccion = em.merge(reaccion);
+        em.remove(reaccion);
+        return reaccion;
     }
 
 }

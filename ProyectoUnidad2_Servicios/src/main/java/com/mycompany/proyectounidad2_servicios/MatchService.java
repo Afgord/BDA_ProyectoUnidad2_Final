@@ -8,6 +8,7 @@ import com.mycompany.proyectounidad2_dominio.Match;
 import com.mycompany.proyectounidad2_exceptions.RecursoNoEncontradoException;
 import com.mycompany.proyectounidad2_exceptions.ValidacionException;
 import com.mycompany.proyectounidad2_persistencia.EstudianteDAO;
+import com.mycompany.proyectounidad2_persistencia.IEstudianteDAO;
 import com.mycompany.proyectounidad2_persistencia.IMatchDAO;
 import com.mycompany.proyectounidad2_persistencia.MatchDAO;
 import com.mycompany.proyectounidad2_utils.JpaUtil;
@@ -29,7 +30,7 @@ public class MatchService implements IMatchService {
         EntityManager em = JpaUtil.getEntityManager();
 
         try {
-            EstudianteDAO estudianteDAO = new EstudianteDAO(em);
+            IEstudianteDAO estudianteDAO = new EstudianteDAO(em);
             if (estudianteDAO.buscarPorId(idEstudiante) == null) {
                 throw new RecursoNoEncontradoException("No existe un estudiante con ese id.");
             }

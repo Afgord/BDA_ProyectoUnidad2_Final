@@ -57,8 +57,39 @@ public class MatchDAO implements IMatchDAO {
 
         TypedQuery<Match> query = em.createQuery(jpql, Match.class);
         query.setParameter("id", idEstudiante);
+        query.setMaxResults(100);
 
         return query.getResultList();
+    }
+
+    @Override
+    public Match buscarPorId(Long id) {
+        return em.find(Match.class, id);
+    }
+
+    @Override
+    public List<Match> listar() {
+        String jpql = """
+        SELECT m
+        FROM Match m
+        """;
+
+        TypedQuery<Match> query = em.createQuery(jpql, Match.class);
+        query.setMaxResults(100);
+
+        return query.getResultList();
+    }
+
+    @Override
+    public Match actualizar(Match match) {
+        return em.merge(match);
+    }
+
+    @Override
+    public Match eliminar(Match match) {
+        match = em.merge(match);
+        em.remove(match);
+        return match;
     }
 
 }

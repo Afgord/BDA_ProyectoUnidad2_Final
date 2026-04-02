@@ -9,8 +9,11 @@ import com.mycompany.proyectounidad2_dominio.Match;
 import com.mycompany.proyectounidad2_dominio.Reaccion;
 import com.mycompany.proyectounidad2_dominio.TipoReaccion;
 import com.mycompany.proyectounidad2_exceptions.NegocioException;
+import com.mycompany.proyectounidad2_exceptions.RecursoNoEncontradoException;
 import com.mycompany.proyectounidad2_exceptions.ReglaNegocioException;
 import com.mycompany.proyectounidad2_exceptions.ValidacionException;
+import com.mycompany.proyectounidad2_persistencia.EstudianteDAO;
+import com.mycompany.proyectounidad2_persistencia.IEstudianteDAO;
 import com.mycompany.proyectounidad2_persistencia.IMatchDAO;
 import com.mycompany.proyectounidad2_persistencia.IReaccionDAO;
 import com.mycompany.proyectounidad2_persistencia.MatchDAO;
@@ -81,6 +84,14 @@ public class ReaccionService implements IReaccionService {
         if (emisor.getId().equals(receptor.getId())) {
             throw new ReglaNegocioException("Un estudiante no puede reaccionar a sí mismo.");
         }
+
+        if (!emisor.isActivo()) {
+            throw new ReglaNegocioException("El emisor no tiene una cuenta activa.");
+        }
+
+        if (!receptor.isActivo()) {
+            throw new ReglaNegocioException("El receptor no tiene una cuenta activa.");
+        }
     }
 
     private Reaccion crearOActualizarReaccion(IReaccionDAO reaccionDAO,
@@ -130,10 +141,25 @@ public class ReaccionService implements IReaccionService {
         EntityManager em = JpaUtil.getEntityManager();
 
         try {
+
+            IEstudianteDAO estudianteDAO = new EstudianteDAO(em);
+            Estudiante estudiante = estudianteDAO.buscarPorId(idEstudiante);
+
+            if (estudiante == null) {
+                throw new RecursoNoEncontradoException("No existe un estudiante con ese id.");
+            }
+
+            if (!estudiante.isActivo()) {
+                throw new ReglaNegocioException("La cuenta del estudiante está desactivada.");
+            }
+
             IReaccionDAO reaccionDAO = new ReaccionDAO(em);
             return reaccionDAO.obtenerLikesPendientes(idEstudiante);
+
+        } catch (NegocioException e) {
+            throw e;
         } catch (Exception e) {
-            throw new RuntimeException("Error al obtener likes pendientes.", e);
+            throw new NegocioException("Error al obtener likes pendientes.");
         } finally {
             em.close();
         }

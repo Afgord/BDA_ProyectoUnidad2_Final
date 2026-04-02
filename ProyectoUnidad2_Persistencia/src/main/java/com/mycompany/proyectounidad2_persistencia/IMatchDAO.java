@@ -16,6 +16,14 @@ public interface IMatchDAO {
 
     Match guardar(Match match);
 
+    Match buscarPorId(Long id);
+
+    List<Match> listar();
+
+    Match actualizar(Match match);
+
+    Match eliminar(Match match);
+
     Match buscarMatchEntre(Estudiante estudiante1, Estudiante estudiante2);
 
     List<Match> buscarMatchesDeEstudiante(Long idEstudiante);

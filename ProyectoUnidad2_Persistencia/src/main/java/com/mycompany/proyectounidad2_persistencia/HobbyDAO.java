@@ -52,9 +52,19 @@ public class HobbyDAO implements IHobbyDAO {
     }
 
     @Override
-    public List<Hobby> obtenerTodos() {
+    public List<Hobby> listar() {
         String jpql = "SELECT h FROM Hobby h";
-        return em.createQuery(jpql, Hobby.class).getResultList();
+        TypedQuery<Hobby> query = em.createQuery(jpql, Hobby.class);
+        query.setMaxResults(100);
+
+        return query.getResultList();
+    }
+
+    @Override
+    public Hobby eliminar(Hobby hobby) {
+        hobby = em.merge(hobby);
+        em.remove(hobby);
+        return hobby;
     }
 
 }

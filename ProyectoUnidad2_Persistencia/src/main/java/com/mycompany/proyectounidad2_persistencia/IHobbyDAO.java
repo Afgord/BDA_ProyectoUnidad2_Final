@@ -21,6 +21,8 @@ public interface IHobbyDAO {
 
     Hobby buscarPorNombre(String nombre);
 
-    List<Hobby> obtenerTodos();
+    List<Hobby> listar();
+
+    Hobby eliminar(Hobby hobby);
 
 }

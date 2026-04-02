@@ -340,17 +340,13 @@ public class frmPerfil extends javax.swing.JFrame {
 
             if (carrera.isBlank()) {
                 JOptionPane.showMessageDialog(this, "La carrera no puede estar vacía.");
+                txtCarrera.requestFocus();
                 return;
             }
 
-//            String foto = usuarioActual.getFotoPerfil();
             String foto = (fotoSeleccionada == null || fotoSeleccionada.isBlank())
                     ? "default.jpg"
                     : fotoSeleccionada;
-
-            if (foto == null || foto.isBlank()) {
-                foto = "default.jpg";
-            }
 
             Estudiante actualizado = estudianteService.actualizarPerfil(
                     usuarioActual.getId(),
@@ -367,6 +363,8 @@ public class frmPerfil extends javax.swing.JFrame {
 
         } catch (NegocioException e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Ocurrió un error inesperado al guardar el perfil.");
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
@@ -392,22 +390,23 @@ public class frmPerfil extends javax.swing.JFrame {
                     .findFirst()
                     .orElse(null);
 
-            if (hobbySeleccionado != null) {
-                boolean yaExiste = usuarioActual.getHobbies().stream()
-                        .anyMatch(h -> h.getId().equals(hobbySeleccionado.getId()));
-
-                if (yaExiste) {
-                    JOptionPane.showMessageDialog(this, "Ya tienes este hobby.");
-                    return;
-                }
-
-                estudianteService.agregarHobby(usuarioActual.getId(), hobbySeleccionado.getId());
-                cargarHobbies();
-                cargarComboHobbies();
+            if (hobbySeleccionado == null) {
+                JOptionPane.showMessageDialog(this, "No se encontró el hobby seleccionado.");
+                return;
             }
+
+            estudianteService.agregarHobby(usuarioActual.getId(), hobbySeleccionado.getId());
+
+            usuarioActual = estudianteService.buscarPorId(usuarioActual.getId());
+            cargarHobbies();
+            cargarComboHobbies();
+
+            JOptionPane.showMessageDialog(this, "Hobby agregado correctamente.");
 
         } catch (NegocioException e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Ocurrió un error inesperado al agregar el hobby.");
         }
     }//GEN-LAST:event_btnAgregarHobbieActionPerformed
 
@@ -419,15 +418,21 @@ public class frmPerfil extends javax.swing.JFrame {
             return;
         }
 
-        //Long idHobby = (Long) tblHobbies.getValueAt(fila, 0);
         Long idHobby = (Long) tblHobbies.getModel().getValueAt(fila, 0);
 
         try {
             estudianteService.quitarHobby(usuarioActual.getId(), idHobby);
+
+            usuarioActual = estudianteService.buscarPorId(usuarioActual.getId());
             cargarHobbies();
             cargarComboHobbies();
+
+            JOptionPane.showMessageDialog(this, "Hobby eliminado del perfil correctamente.");
+
         } catch (NegocioException e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Ocurrió un error inesperado al quitar el hobby.");
         }
     }//GEN-LAST:event_btnQuitarHobbieActionPerformed
 
@@ -448,19 +453,21 @@ public class frmPerfil extends javax.swing.JFrame {
 
             estudianteService.agregarHobby(usuarioActual.getId(), nuevo.getId());
 
-            JOptionPane.showMessageDialog(this, "Hobby agregado correctamente");
-
+            usuarioActual = estudianteService.buscarPorId(usuarioActual.getId());
             cargarHobbies();
             cargarComboHobbies();
 
+            JOptionPane.showMessageDialog(this, "Hobby agregado correctamente.");
+
         } catch (NegocioException e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Ocurrió un error inesperado al crear el hobby.");
         }
     }//GEN-LAST:event_btnNuevoHobbyActionPerformed
 
     private void lblCambiarFotoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblCambiarFotoMouseClicked
         try {
-
             java.io.File carpetaInicial = new java.io.File(
                     "src/main/resources/imagenes/perfiles"
             );
@@ -468,7 +475,6 @@ public class frmPerfil extends javax.swing.JFrame {
             javax.swing.JFileChooser fileChooser = new javax.swing.JFileChooser(carpetaInicial);
             fileChooser.setDialogTitle("Seleccionar imagen");
 
-            // Filtro solo imágenes
             fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter(
                     "Imágenes", "jpg", "jpeg", "png"
             ));
@@ -477,10 +483,8 @@ public class frmPerfil extends javax.swing.JFrame {
 
             if (resultado == javax.swing.JFileChooser.APPROVE_OPTION) {
                 java.io.File archivo = fileChooser.getSelectedFile();
-
                 String nombreArchivo = archivo.getName();
 
-                // 🔥 IMPORTANTE: copiar a resources (simplificado)
                 java.nio.file.Path destino = java.nio.file.Paths.get(
                         "src/main/resources/imagenes/perfiles/" + nombreArchivo
                 );
@@ -491,14 +495,12 @@ public class frmPerfil extends javax.swing.JFrame {
                         java.nio.file.StandardCopyOption.REPLACE_EXISTING
                 );
 
-//                usuarioActual.setFotoPerfil(nombreArchivo);
-//                cargarFotoPerfil(nombreArchivo);
                 fotoSeleccionada = nombreArchivo;
                 cargarFotoPerfil(fotoSeleccionada);
             }
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error al cargar imagen");
+            JOptionPane.showMessageDialog(this, "Error al cargar imagen.");
         }
     }//GEN-LAST:event_lblCambiarFotoMouseClicked
 
@@ -527,6 +529,8 @@ public class frmPerfil extends javax.swing.JFrame {
 
         } catch (NegocioException e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Ocurrió un error inesperado al desactivar la cuenta.");
         }
     }//GEN-LAST:event_btnDesactivarActionPerformed
 
@@ -573,7 +577,6 @@ public class frmPerfil extends javax.swing.JFrame {
 
             lblTitulo.setText("PERFIL DE " + actualizado.getNombre());
 
-            //cargarFotoPerfil(actualizado.getFotoPerfil());
             String fotoAMostrar = (fotoSeleccionada == null || fotoSeleccionada.isBlank())
                     ? actualizado.getFotoPerfil()
                     : fotoSeleccionada;
@@ -584,6 +587,8 @@ public class frmPerfil extends javax.swing.JFrame {
 
         } catch (NegocioException e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Ocurrió un error inesperado al cargar el perfil.");
         }
     }
 
@@ -603,7 +608,9 @@ public class frmPerfil extends javax.swing.JFrame {
             }
 
         } catch (NegocioException ex) {
-            JOptionPane.showMessageDialog(this, "Error al cargar hobbies");
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Ocurrió un error inesperado al cargar hobbies.");
         }
     }
 
@@ -629,6 +636,8 @@ public class frmPerfil extends javax.swing.JFrame {
 
         } catch (NegocioException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Ocurrió un error inesperado al cargar la lista de hobbies.");
         }
     }
 

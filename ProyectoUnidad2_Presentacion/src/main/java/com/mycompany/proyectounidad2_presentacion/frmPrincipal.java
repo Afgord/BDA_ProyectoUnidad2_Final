@@ -272,10 +272,14 @@ public class frmPrincipal extends javax.swing.JFrame {
                 frmExplorar frm = new frmExplorar(usuarioActual, objetivo.getId());
                 frm.setVisible(true);
                 this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "No se pudo identificar el alumno seleccionado.");
             }
 
         } catch (NegocioException e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Ocurrió un error inesperado al cargar los likes pendientes.");
         }
     }//GEN-LAST:event_lblNotificacionMouseClicked
 
@@ -334,10 +338,14 @@ public class frmPrincipal extends javax.swing.JFrame {
             lblContador.setText(String.valueOf(cantidad));
             lblContador.setVisible(cantidad > 0);
 
+        } catch (NegocioException e) {
+            lblContador.setText("0");
+            lblContador.setVisible(false);
         } catch (Exception e) {
             lblContador.setText("0");
             lblContador.setVisible(false);
         }
+
         lblContador.revalidate();
         lblContador.repaint();
         pack();
@@ -346,7 +354,13 @@ public class frmPrincipal extends javax.swing.JFrame {
     }
 
     private ImageIcon cargarIcono(String ruta) {
-        ImageIcon icono = new ImageIcon(getClass().getResource(ruta));
+        java.net.URL url = getClass().getResource(ruta);
+
+        if (url == null) {
+            return null;
+        }
+
+        ImageIcon icono = new ImageIcon(url);
         java.awt.Image img = icono.getImage().getScaledInstance(32, 32, java.awt.Image.SCALE_SMOOTH);
         return new ImageIcon(img);
     }

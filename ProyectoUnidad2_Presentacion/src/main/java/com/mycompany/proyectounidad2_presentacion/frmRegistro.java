@@ -35,7 +35,7 @@ public class frmRegistro extends javax.swing.JFrame {
         lblCambiarFoto.setText("<html><u>Cambiar foto</u></html>");
         lblCambiarFoto.setForeground(new java.awt.Color(0, 102, 204));
         lblCambiarFoto.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-
+        getRootPane().setDefaultButton(btnRegistrar);
         cargarFotoPerfil(fotoSeleccionada);
     }
 
@@ -271,7 +271,7 @@ public class frmRegistro extends javax.swing.JFrame {
             String nombre = txtNombre.getText().trim();
             String apPat = txtApPat.getText().trim();
             String apMat = txtApMat.getText().trim();
-            String correo = txtCorreo.getText().trim();
+            String correo = txtCorreo.getText().trim().toLowerCase();
             String password = new String(txtContrasena.getPassword()).trim();
             String confirmar = new String(txtConfirmarContrasena.getPassword()).trim();
             String carrera = txtCarrera.getText().trim();
@@ -283,24 +283,23 @@ public class frmRegistro extends javax.swing.JFrame {
             if (nombre.isBlank() || apPat.isBlank() || apMat.isBlank()
                     || correo.isBlank() || password.isBlank() || carrera.isBlank()) {
                 JOptionPane.showMessageDialog(this, "Todos los campos obligatorios deben llenarse.");
+                txtNombre.requestFocus();
                 return;
             }
 
             if (!password.equals(confirmar)) {
                 JOptionPane.showMessageDialog(this, "Las contraseñas no coinciden.");
+                txtContrasena.setText("");
+                txtConfirmarContrasena.setText("");
+                txtContrasena.requestFocus();
                 return;
             }
 
-            if (password.length() < 6) {
-                JOptionPane.showMessageDialog(this, "La contraseña es muy corta.");
-                return;
-            }
-
-            if (!correo.endsWith("@potros.itson.edu.mx")) {
-                JOptionPane.showMessageDialog(this, "Debe usar correo institucional.");
-                return;
-            }
-
+//            if (!correo.endsWith("@potros.itson.edu.mx")) {
+//                JOptionPane.showMessageDialog(this, "Debe usar correo institucional.");
+//                txtCorreo.requestFocus();
+//                return;
+//            }
             Estudiante estudiante = new Estudiante();
             estudiante.setNombre(nombre);
             estudiante.setApPat(apPat);
@@ -322,6 +321,8 @@ public class frmRegistro extends javax.swing.JFrame {
 
         } catch (NegocioException e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Ocurrió un error inesperado.");
         }
     }//GEN-LAST:event_btnRegistrarActionPerformed
 

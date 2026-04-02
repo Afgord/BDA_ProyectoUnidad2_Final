@@ -90,7 +90,7 @@ public class HobbyService implements IHobbyService {
 
         try {
             IHobbyDAO hobbyDAO = new HobbyDAO(em);
-            return hobbyDAO.obtenerTodos();
+            return hobbyDAO.listar();
         } finally {
             em.close();
         }

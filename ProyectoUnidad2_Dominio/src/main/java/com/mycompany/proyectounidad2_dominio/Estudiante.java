@@ -13,6 +13,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -54,7 +55,10 @@ public class Estudiante implements Serializable {
     @JoinTable(
             name = "estudiante_hobby",
             joinColumns = @JoinColumn(name = "id_estudiante"),
-            inverseJoinColumns = @JoinColumn(name = "id_hobby")
+            inverseJoinColumns = @JoinColumn(name = "id_hobby"),
+            uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"id_estudiante", "id_hobby"})
+            }
     )
     private Set<Hobby> hobbies = new HashSet<>();
 

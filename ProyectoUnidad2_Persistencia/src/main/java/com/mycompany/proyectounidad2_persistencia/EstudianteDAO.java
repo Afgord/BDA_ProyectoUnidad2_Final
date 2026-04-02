@@ -80,6 +80,7 @@ public class EstudianteDAO implements IEstudianteDAO {
 
         TypedQuery<Estudiante> query = em.createQuery(jpql, Estudiante.class);
         query.setParameter("idEstudiante", idEstudiante);
+        query.setMaxResults(100);
 
         return query.getResultList();
     }
@@ -100,8 +101,28 @@ public class EstudianteDAO implements IEstudianteDAO {
 
         TypedQuery<Estudiante> query = em.createQuery(jpql, Estudiante.class);
         query.setParameter("idEstudiante", idEstudiante);
+        query.setMaxResults(100);
 
         return query.getResultList();
+    }
+
+    @Override
+    public List<Estudiante> listar() {
+        String jpql = """
+    SELECT e
+    FROM Estudiante e
+    WHERE e.activo = true
+    """;
+
+        TypedQuery<Estudiante> query = em.createQuery(jpql, Estudiante.class);
+        query.setMaxResults(100);
+
+        return query.getResultList();
+    }
+
+    @Override
+    public Estudiante eliminar(Estudiante estudiante) {
+        return em.merge(estudiante);
     }
 
 }

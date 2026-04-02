@@ -97,10 +97,6 @@ public class EstudianteService implements IEstudianteService {
     }
 
     private void validarDatosEstudiante(Estudiante estudiante) {
-        if (estudiante == null) {
-            throw new ValidacionException("El estudiante no puede ser nulo.");
-        }
-
         if (estudiante.getNombre() == null || estudiante.getNombre().isBlank()) {
             throw new ValidacionException("El nombre no puede ser nulo o vacío.");
         }
@@ -118,7 +114,7 @@ public class EstudianteService implements IEstudianteService {
         }
 
         if (!esCorreoInstitucionalValido(estudiante.getCorreoInst())) {
-            throw new ValidacionException("El correo institucional no tiene un formato válido.");
+            throw new ValidacionException("El correo institucional no tiene un formato válido. Debe ser usuario@potros.itson.edu.mx");
         }
 
         if (estudiante.getPassword() == null || estudiante.getPassword().isBlank()) {
@@ -194,10 +190,7 @@ public class EstudianteService implements IEstudianteService {
             IEstudianteDAO estudianteDAO = new EstudianteDAO(em);
             IHobbyDAO hobbyDAO = new HobbyDAO(em);
 
-            Estudiante estudiante = estudianteDAO.buscarPorId(idEstudiante);
-            if (estudiante == null) {
-                throw new RecursoNoEncontradoException("No existe un estudiante con ese id.");
-            }
+            Estudiante estudiante = obtenerEstudianteActivoPorId(estudianteDAO, idEstudiante);
 
             Hobby hobby = hobbyDAO.buscarPorId(idHobby);
             if (hobby == null) {
@@ -240,7 +233,13 @@ public class EstudianteService implements IEstudianteService {
 
         try {
             IEstudianteDAO estudianteDAO = new EstudianteDAO(em);
-            return estudianteDAO.buscarPorId(id);
+            Estudiante estudiante = estudianteDAO.buscarPorId(id);
+
+            if (estudiante == null) {
+                throw new RecursoNoEncontradoException("No existe un estudiante con ese id.");
+            }
+
+            return estudiante;
         } finally {
             em.close();
         }
@@ -255,13 +254,16 @@ public class EstudianteService implements IEstudianteService {
         EntityManager em = JpaUtil.getEntityManager();
 
         try {
-
             IEstudianteDAO estudianteDAO = new EstudianteDAO(em);
 
             Estudiante estudiante = estudianteDAO.buscarPorIdConHobbies(id);
 
             if (estudiante == null) {
                 throw new RecursoNoEncontradoException("No existe un estudiante con ese id.");
+            }
+
+            if (!estudiante.isActivo()) {
+                throw new ReglaNegocioException("La cuenta del estudiante está desactivada.");
             }
 
             return estudiante;
@@ -282,10 +284,7 @@ public class EstudianteService implements IEstudianteService {
         try {
             IEstudianteDAO estudianteDAO = new EstudianteDAO(em);
 
-            Estudiante estudiante = estudianteDAO.buscarPorId(idEstudiante);
-            if (estudiante == null) {
-                throw new RecursoNoEncontradoException("No existe un estudiante con ese id.");
-            }
+            obtenerEstudianteActivoPorId(estudianteDAO, idEstudiante);
 
             return estudianteDAO.buscarConHobbiesEnComun(idEstudiante);
 
@@ -305,10 +304,7 @@ public class EstudianteService implements IEstudianteService {
         try {
             IEstudianteDAO estudianteDAO = new EstudianteDAO(em);
 
-            Estudiante estudiante = estudianteDAO.buscarPorId(idEstudiante);
-            if (estudiante == null) {
-                throw new RecursoNoEncontradoException("No existe un estudiante con ese id.");
-            }
+            obtenerEstudianteActivoPorId(estudianteDAO, idEstudiante);
 
             return estudianteDAO.explorarPerfiles(idEstudiante);
 
@@ -338,6 +334,10 @@ public class EstudianteService implements IEstudianteService {
             Estudiante estudiante = estudianteDAO.buscarPorIdConHobbies(idEstudiante);
             if (estudiante == null) {
                 throw new RecursoNoEncontradoException("No existe un estudiante con ese id.");
+            }
+
+            if (!estudiante.isActivo()) {
+                throw new ReglaNegocioException("La cuenta del estudiante está desactivada.");
             }
 
             Hobby hobby = hobbyDAO.buscarPorId(idHobby);
@@ -384,10 +384,7 @@ public class EstudianteService implements IEstudianteService {
 
             IEstudianteDAO estudianteDAO = new EstudianteDAO(em);
 
-            Estudiante estudiante = estudianteDAO.buscarPorId(idEstudiante);
-            if (estudiante == null) {
-                throw new RecursoNoEncontradoException("No existe un estudiante con ese id.");
-            }
+            Estudiante estudiante = obtenerEstudianteActivoPorId(estudianteDAO, idEstudiante);
 
             if (carrera != null && !carrera.isBlank()) {
                 estudiante.setCarrera(carrera.trim());
@@ -401,7 +398,7 @@ public class EstudianteService implements IEstudianteService {
                 estudiante.setDescripcion(descripcion);
             }
 
-            if (fotoPerfil != null) {
+            if (fotoPerfil != null && !fotoPerfil.isBlank()) {
                 estudiante.setFotoPerfil(fotoPerfil.trim());
             }
 
@@ -467,14 +464,32 @@ public class EstudianteService implements IEstudianteService {
         }
     }
 
+//    private boolean esCorreoInstitucionalValido(String correo) {
+//        return correo != null
+//                && correo.matches("^[A-Za-z0-9._%+-]+@potros\\.itson\\.edu\\.mx$");
+//    }
     private boolean esCorreoInstitucionalValido(String correo) {
         return correo != null
-                && correo.matches("^[A-Za-z0-9._%+-]+@potros\\.itson\\.edu\\.mx$");
+                && correo.matches("^[A-Za-z0-9]+([._%+-]?[A-Za-z0-9]+)*@potros\\.itson\\.edu\\.mx$");
     }
 
     private boolean esPasswordRobusto(String password) {
         return password != null
                 && password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{6,}$");
+    }
+
+    private Estudiante obtenerEstudianteActivoPorId(IEstudianteDAO estudianteDAO, Long idEstudiante) {
+        Estudiante estudiante = estudianteDAO.buscarPorId(idEstudiante);
+
+        if (estudiante == null) {
+            throw new RecursoNoEncontradoException("No existe un estudiante con ese id.");
+        }
+
+        if (!estudiante.isActivo()) {
+            throw new ReglaNegocioException("La cuenta del estudiante está desactivada.");
+        }
+
+        return estudiante;
     }
 
 }

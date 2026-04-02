@@ -23,8 +23,12 @@ public interface IEstudianteDAO {
 
     List<Estudiante> explorarPerfiles(Long idEstudiante);
 
+    List<Estudiante> listar();
+
     Estudiante buscarPorCorreo(String correoInst);
 
     Estudiante actualizar(Estudiante estudiante);
+
+    Estudiante eliminar(Estudiante estudiante);
 
 }

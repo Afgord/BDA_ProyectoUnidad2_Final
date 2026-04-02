@@ -298,9 +298,15 @@ public class frmExplorar extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnteriorActionPerformed
+        if (perfiles == null || perfiles.isEmpty()) {
+            return;
+        }
+
         if (indiceActual > 0) {
             indiceActual--;
             mostrarPerfilActual();
+        } else {
+            JOptionPane.showMessageDialog(this, "Ya estás en el primer perfil.");
         }
     }//GEN-LAST:event_btnAnteriorActionPerformed
 
@@ -309,8 +315,16 @@ public class frmExplorar extends javax.swing.JFrame {
     }//GEN-LAST:event_btnNoInteresaActionPerformed
 
     private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
-        indiceActual++;
-        mostrarPerfilActual();
+        if (perfiles == null || perfiles.isEmpty()) {
+            return;
+        }
+
+        if (indiceActual < perfiles.size() - 1) {
+            indiceActual++;
+            mostrarPerfilActual();
+        } else {
+            JOptionPane.showMessageDialog(this, "Ya no hay más perfiles.");
+        }
     }//GEN-LAST:event_btnSiguienteActionPerformed
 
     private void btnLikeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLikeActionPerformed
@@ -377,11 +391,23 @@ public class frmExplorar extends javax.swing.JFrame {
             perfiles = new ArrayList<>(mapa.values());
 
             if (perfiles.isEmpty()) {
+                btnLike.setEnabled(false);
+                btnNoInteresa.setEnabled(false);
+                btnSiguiente.setEnabled(false);
+                btnAnterior.setEnabled(false);
+
                 JOptionPane.showMessageDialog(this, "No hay perfiles disponibles.");
+            } else {
+                btnLike.setEnabled(true);
+                btnNoInteresa.setEnabled(true);
+                btnSiguiente.setEnabled(true);
+                btnAnterior.setEnabled(true);
             }
 
         } catch (NegocioException e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Ocurrió un error inesperado al cargar perfiles.");
         }
     }
 
@@ -391,12 +417,13 @@ public class frmExplorar extends javax.swing.JFrame {
             lblCarrera.setText("");
             txtDescripcion.setText("");
             txtHobbies.setText("");
-            return;
-        }
+            lblFoto.setIcon(null);
+            lblFoto.setText("Sin foto");
 
-        if (indiceActual >= perfiles.size()) {
-            JOptionPane.showMessageDialog(this, "Ya no hay más perfiles.");
-            indiceActual = perfiles.size() - 1;
+            btnLike.setEnabled(false);
+            btnNoInteresa.setEnabled(false);
+            btnSiguiente.setEnabled(false);
+            btnAnterior.setEnabled(false);
             return;
         }
 
@@ -404,9 +431,12 @@ public class frmExplorar extends javax.swing.JFrame {
             indiceActual = 0;
         }
 
+        if (indiceActual >= perfiles.size()) {
+            indiceActual = perfiles.size() - 1;
+        }
+
         Estudiante e = perfiles.get(indiceActual);
 
-        // Traer detalle con hobbies
         Estudiante detalle = estudianteService.buscarPorIdConHobbies(e.getId());
 
         lblNombre.setText(detalle.getNombre() + " " + detalle.getApPat());
@@ -423,46 +453,19 @@ public class frmExplorar extends javax.swing.JFrame {
         txtHobbies.setText(hobbiesTexto);
 
         cargarFotoPerfil(detalle.getFotoPerfil());
+
+        btnAnterior.setEnabled(indiceActual > 0);
+        btnSiguiente.setEnabled(indiceActual < perfiles.size() - 1);
+        btnLike.setEnabled(true);
+        btnNoInteresa.setEnabled(true);
     }
 
-//    private void reaccionar(TipoReaccion tipo) {
-//        if (perfiles == null || perfiles.isEmpty()) {
-//            return;
-//        }
-//
-//        Estudiante receptor = perfiles.get(indiceActual);
-//
-//        try {
-//            if (tipo == TipoReaccion.LIKE) {
-//                int matchesAntes = matchService
-//                        .obtenerMatchesDeEstudiante(usuarioActual.getId())
-//                        .size();
-//
-//                reaccionService.registrarReaccion(usuarioActual, receptor, tipo);
-//
-//                int matchesDespues = matchService
-//                        .obtenerMatchesDeEstudiante(usuarioActual.getId())
-//                        .size();
-//
-//                if (matchesDespues > matchesAntes) {
-//                    JOptionPane.showMessageDialog(this, "💥 ¡ES UN MATCH!");
-//                } else {
-//                    JOptionPane.showMessageDialog(this, "Te gusta este perfil");
-//                }
-//
-//            } else {
-//                reaccionService.registrarReaccion(usuarioActual, receptor, tipo);
-//            }
-//
-//            indiceActual++;
-//            mostrarPerfilActual();
-//
-//        } catch (NegocioException e) {
-//            JOptionPane.showMessageDialog(this, e.getMessage());
-//        }
-//    }
     private void reaccionar(TipoReaccion tipo) {
         if (perfiles == null || perfiles.isEmpty()) {
+            return;
+        }
+
+        if (indiceActual < 0 || indiceActual >= perfiles.size()) {
             return;
         }
 
@@ -488,19 +491,17 @@ public class frmExplorar extends javax.swing.JFrame {
 
             } else {
                 reaccionService.registrarReaccion(usuarioActual, receptor, tipo);
+                JOptionPane.showMessageDialog(this, "Se registró tu reacción.");
             }
 
-            // 🔥 volver a cargar perfiles desde BD
             cargarPerfiles();
 
-            // si ya no hay perfiles, mostrar estado vacío
             if (perfiles == null || perfiles.isEmpty()) {
                 indiceActual = 0;
                 mostrarPerfilActual();
                 return;
             }
 
-            // mantener índice dentro de rango
             if (indiceActual >= perfiles.size()) {
                 indiceActual = perfiles.size() - 1;
             }
@@ -509,6 +510,8 @@ public class frmExplorar extends javax.swing.JFrame {
 
         } catch (NegocioException e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Ocurrió un error inesperado al registrar la reacción.");
         }
     }
 

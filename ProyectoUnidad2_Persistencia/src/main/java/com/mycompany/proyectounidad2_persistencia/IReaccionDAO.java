@@ -16,7 +16,13 @@ public interface IReaccionDAO {
 
     Reaccion guardar(Reaccion reaccion);
 
+    Reaccion buscarPorId(Long id);
+
+    List<Reaccion> listar();
+
     Reaccion actualizar(Reaccion reaccion);
+
+    Reaccion eliminar(Reaccion reaccion);
 
     Reaccion buscarPorEmisorReceptor(Estudiante emisor, Estudiante receptor);
 

@@ -7,6 +7,7 @@ package com.mycompany.proyectounidad2_presentacion;
 import com.mycompany.proyectounidad2_dominio.Estudiante;
 import com.mycompany.proyectounidad2_exceptions.NegocioException;
 import com.mycompany.proyectounidad2_servicios.EstudianteService;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -23,6 +24,7 @@ public class frmLogin extends javax.swing.JFrame {
         initComponents();
         lblRegistro.setText("<html><a href=''>¡Regístrate aquí!</a></html>");
         lblRegistro.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        getRootPane().setDefaultButton(btnIniciar);
         setLocationRelativeTo(null);
     }
 
@@ -186,7 +188,7 @@ public class frmLogin extends javax.swing.JFrame {
 
     private void btnIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarActionPerformed
         try {
-            String correo = txtCorreo.getText();
+            String correo = txtCorreo.getText().trim().toLowerCase();
             String password = new String(txtContrasena.getPassword());
 
             if (correo.isBlank() || password.isBlank()) {
@@ -205,6 +207,12 @@ public class frmLogin extends javax.swing.JFrame {
 
         } catch (NegocioException e) {
             javax.swing.JOptionPane.showMessageDialog(this, e.getMessage());
+            txtContrasena.setText("");
+            txtCorreo.requestFocus();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Ocurrió un error inesperado.");
+            txtContrasena.setText("");
+            txtCorreo.requestFocus();
         }
     }//GEN-LAST:event_btnIniciarActionPerformed
 

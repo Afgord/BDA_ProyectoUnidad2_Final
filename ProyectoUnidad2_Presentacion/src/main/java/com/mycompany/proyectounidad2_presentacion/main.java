@@ -213,6 +213,69 @@ public class main {
                 System.out.println("Esperado: " + e.getMessage());
             }
 
+            System.out.println("\n=== PRUEBAS DE VALIDACIONES NUEVAS ===");
+
+            System.out.println("\n=== INTENTO DE EXPLORAR PERFILES CON SOFIA DESACTIVADA ===");
+            try {
+                estudianteService.explorarPerfiles(sofia.getId());
+                System.out.println("ERROR: no debió permitir explorar perfiles.");
+            } catch (Exception e) {
+                System.out.println("Esperado: " + e.getMessage());
+            }
+
+            System.out.println("\n=== INTENTO DE ACTUALIZAR PERFIL DE SOFIA DESACTIVADA ===");
+            try {
+                estudianteService.actualizarPerfil(
+                        sofia.getId(),
+                        "Diseño Gráfico",
+                        "Intento de actualización",
+                        "default.jpg"
+                );
+                System.out.println("ERROR: no debió permitir actualizar perfiles.");
+            } catch (Exception e) {
+                System.out.println("Esperado: " + e.getMessage());
+            }
+
+            System.out.println("\n=== INTENTO DE AGREGAR HOBBY REPETIDO A ANA ===");
+            try {
+                estudianteService.agregarHobby(ana.getId(), programacion.getId());
+            } catch (Exception e) {
+                System.out.println("Esperado: " + e.getMessage());
+            }
+
+            System.out.println("\n=== INTENTO DE QUITAR HOBBY NO ASIGNADO A ANA ===");
+            try {
+                estudianteService.quitarHobby(ana.getId(), gym.getId());
+            } catch (Exception e) {
+                System.out.println("Esperado: " + e.getMessage());
+            }
+
+            System.out.println("\n=== EXPLORAR PERFILES DESDE ANA DESPUÉS DE REACCIONES ===");
+            List<Estudiante> perfilesAnaDespues = estudianteService.explorarPerfiles(ana.getId());
+            if (perfilesAnaDespues.isEmpty()) {
+                System.out.println("No hay perfiles para explorar.");
+            } else {
+                for (Estudiante e : perfilesAnaDespues) {
+                    System.out.println("- " + e.getNombre() + " | " + e.getCarrera());
+                }
+            }
+
+            System.out.println("\n=== BUSCAR ESTUDIANTE INEXISTENTE ===");
+            try {
+                estudianteService.buscarPorId(999999L);
+                System.out.println("ERROR: no debió encontrar perfíl inexistente.");
+            } catch (Exception e) {
+                System.out.println("Esperado: " + e.getMessage());
+            }
+
+            System.out.println("\n=== LIKES PENDIENTES DE SOFIA DESACTIVADA ===");
+            try {
+                reaccionService.obtenerLikesPendientes(sofia.getId());
+                System.out.println("ERROR: no debió permitir dar likes con perfil desactivado.");
+            } catch (Exception e) {
+                System.out.println("Esperado: " + e.getMessage());
+            }
+
         } catch (Exception e) {
             System.out.println("\nERROR GENERAL EN PRUEBAS: " + e.getMessage());
             e.printStackTrace();
