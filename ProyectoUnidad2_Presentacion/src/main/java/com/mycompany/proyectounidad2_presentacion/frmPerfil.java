@@ -40,14 +40,19 @@ public class frmPerfil extends javax.swing.JFrame {
         this.usuarioActual = usuario;
         this.fotoSeleccionada = usuario.getFotoPerfil();
         setLocationRelativeTo(null);
+
         lblFoto.setPreferredSize(new java.awt.Dimension(100, 100));
         lblFoto.setMinimumSize(new java.awt.Dimension(100, 100));
         lblFoto.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblFoto.setVerticalAlignment(javax.swing.SwingConstants.CENTER);
         lblFoto.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
         lblCambiarFoto.setText("<html><u>Cambiar foto</u></html>");
         lblCambiarFoto.setForeground(new java.awt.Color(0, 102, 204));
         lblCambiarFoto.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+        btnDesactivar.setBackground(new java.awt.Color(220, 53, 69));
+        btnDesactivar.setForeground(java.awt.Color.WHITE);
 
         ocultarColumnaIdHobbies();
         cargarDatosPerfil();
@@ -83,6 +88,7 @@ public class frmPerfil extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         btnGuardar = new javax.swing.JButton();
         btnRegresar = new javax.swing.JButton();
+        btnDesactivar = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblHobbies = new javax.swing.JTable();
         btnQuitarHobbie = new javax.swing.JButton();
@@ -163,35 +169,34 @@ public class frmPerfil extends javax.swing.JFrame {
                 .addGap(21, 21, 21)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmbHobbies, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnAgregarHobbie)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnNuevoHobby)
-                        .addGap(13, 13, 13))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(lblCorreo)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(lblNombre)
+                        .addGap(117, 117, 117)
+                        .addComponent(lblApPat)
+                        .addGap(26, 26, 26)
+                        .addComponent(lblApMat)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(lblDescripcion)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane1))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(lblCarrera)
                                 .addGap(18, 18, 18)
                                 .addComponent(txtCarrera))
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(lblNombre)
-                                .addGap(117, 117, 117)
-                                .addComponent(lblApPat)
-                                .addGap(26, 26, 26)
-                                .addComponent(lblApMat)
-                                .addGap(0, 93, Short.MAX_VALUE)))
-                        .addGap(24, 24, 24))))
+                                .addComponent(lblDescripcion)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane1))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cmbHobbies, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnAgregarHobbie)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnNuevoHobby)))
+                        .addGap(13, 13, 13))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -229,25 +234,34 @@ public class frmPerfil extends javax.swing.JFrame {
         btnRegresar.setText("Regresar");
         btnRegresar.addActionListener(this::btnRegresarActionPerformed);
 
+        btnDesactivar.setText("ELIMINAR CUENTA");
+        btnDesactivar.addActionListener(this::btnDesactivarActionPerformed);
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(123, Short.MAX_VALUE)
                 .addComponent(btnGuardar)
-                .addGap(39, 39, 39)
+                .addGap(113, 113, 113)
                 .addComponent(btnRegresar)
-                .addGap(113, 113, 113))
+                .addGap(122, 122, 122))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(186, 186, 186)
+                .addComponent(btnDesactivar)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(16, 16, 16)
+                .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnGuardar)
                     .addComponent(btnRegresar))
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                .addComponent(btnDesactivar)
+                .addContainerGap())
         );
 
         tblHobbies.setModel(new javax.swing.table.DefaultTableModel(
@@ -307,12 +321,11 @@ public class frmPerfil extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnQuitarHobbie)
-                        .addGap(41, 41, 41)))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(43, 43, 43)
+                        .addComponent(btnQuitarHobbie)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -489,8 +502,37 @@ public class frmPerfil extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_lblCambiarFotoMouseClicked
 
+    private void btnDesactivarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDesactivarActionPerformed
+        int opcion = JOptionPane.showConfirmDialog(
+                this,
+                "¿Estás seguro de que deseas desactivar tu cuenta?",
+                "Confirmar desactivación",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE
+        );
+
+        if (opcion != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        try {
+            estudianteService.desactivarCuenta(usuarioActual.getId());
+
+            JOptionPane.showMessageDialog(this,
+                    "Tu cuenta ha sido desactivada correctamente.");
+
+            frmLogin login = new frmLogin();
+            login.setVisible(true);
+            this.dispose();
+
+        } catch (NegocioException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }//GEN-LAST:event_btnDesactivarActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarHobbie;
+    private javax.swing.JButton btnDesactivar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnNuevoHobby;
     private javax.swing.JButton btnQuitarHobbie;

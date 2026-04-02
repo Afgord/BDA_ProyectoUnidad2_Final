@@ -34,6 +34,7 @@ public class frmExplorar extends javax.swing.JFrame {
     private Estudiante usuarioActual;
     private List<Estudiante> perfiles;
     private int indiceActual = 0;
+    private Long idObjetivo;
 
     private IEstudianteService estudianteService = new EstudianteService();
     private IReaccionService reaccionService = new ReaccionService();
@@ -83,6 +84,51 @@ public class frmExplorar extends javax.swing.JFrame {
         lblFoto.setMinimumSize(new java.awt.Dimension(120, 120));
 
         cargarPerfiles();
+        mostrarPerfilActual();
+        setLocationRelativeTo(null);
+    }
+
+    public frmExplorar(Estudiante usuario, Long idObjetivo) {
+        initComponents();
+        this.usuarioActual = usuario;
+        this.idObjetivo = idObjetivo;
+
+        txtHobbies.setLineWrap(true);
+        txtHobbies.setWrapStyleWord(true);
+        txtHobbies.setEditable(false);
+        txtHobbies.setOpaque(false);
+
+        btnAnterior.setIcon(cargarIcono("/imagenes/iconos/flecha_izquierda.png"));
+        btnAnterior.setText("");
+        btnAnterior.setBorderPainted(false);
+        btnAnterior.setContentAreaFilled(false);
+
+        btnSiguiente.setIcon(cargarIcono("/imagenes/iconos/flecha_derecha.png"));
+        btnSiguiente.setText("");
+        btnSiguiente.setBorderPainted(false);
+        btnSiguiente.setContentAreaFilled(false);
+
+        btnLike.setIcon(cargarIcono("/imagenes/iconos/like.png"));
+        btnLike.setText("LIKE");
+        btnLike.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnLike.setIconTextGap(10);
+        btnLike.setBackground(new java.awt.Color(76, 175, 80)); // verde
+        btnLike.setForeground(java.awt.Color.WHITE);
+
+        btnNoInteresa.setIcon(cargarIcono("/imagenes/iconos/dislike.png"));
+        btnNoInteresa.setText("NO ME INTERESA");
+        btnNoInteresa.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnNoInteresa.setIconTextGap(10);
+        btnNoInteresa.setBackground(new java.awt.Color(244, 67, 54)); // rojo
+        btnNoInteresa.setForeground(java.awt.Color.WHITE);
+
+        lblFoto.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblFoto.setVerticalAlignment(javax.swing.SwingConstants.CENTER);
+        lblFoto.setPreferredSize(new java.awt.Dimension(120, 120));
+        lblFoto.setMinimumSize(new java.awt.Dimension(120, 120));
+
+        cargarPerfiles();
+        posicionarEnObjetivo();
         mostrarPerfilActual();
         setLocationRelativeTo(null);
     }
@@ -508,6 +554,19 @@ public class frmExplorar extends javax.swing.JFrame {
         ImageIcon icono = new ImageIcon(url);
         java.awt.Image img = icono.getImage().getScaledInstance(32, 32, java.awt.Image.SCALE_SMOOTH);
         return new ImageIcon(img);
+    }
+
+    private void posicionarEnObjetivo() {
+        if (idObjetivo == null || perfiles == null || perfiles.isEmpty()) {
+            return;
+        }
+
+        for (int i = 0; i < perfiles.size(); i++) {
+            if (perfiles.get(i).getId().equals(idObjetivo)) {
+                indiceActual = i;
+                return;
+            }
+        }
     }
 
 }

@@ -6,8 +6,10 @@ package com.mycompany.proyectounidad2_persistencia;
  */
 import com.mycompany.proyectounidad2_dominio.Estudiante;
 import com.mycompany.proyectounidad2_dominio.Reaccion;
+import com.mycompany.proyectounidad2_dominio.TipoReaccion;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
+import java.util.List;
 
 /**
  *
@@ -46,6 +48,27 @@ public class ReaccionDAO implements IReaccionDAO {
         query.setParameter("receptor", receptor);
 
         return query.getResultStream().findFirst().orElse(null);
+    }
+
+    @Override
+    public List<Estudiante> obtenerLikesPendientes(Long idReceptor) {
+        String jpql = """
+        SELECT r.emisor
+        FROM Reaccion r
+        WHERE r.receptor.id = :idReceptor
+          AND r.tipo = :tipoLike
+          AND NOT EXISTS (
+              SELECT r2
+              FROM Reaccion r2
+              WHERE r2.emisor.id = :idReceptor
+                AND r2.receptor.id = r.emisor.id
+          )
+        """;
+
+        return em.createQuery(jpql, Estudiante.class)
+                .setParameter("idReceptor", idReceptor)
+                .setParameter("tipoLike", TipoReaccion.LIKE)
+                .getResultList();
     }
 
 }

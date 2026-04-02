@@ -143,7 +143,37 @@ public class main {
             reaccionService.registrarReaccion(ana, diego, TipoReaccion.NO_INTERESA);
             System.out.println("Ana dio NO_INTERESA a Diego");
 
-            // 8. Ver matches
+            // 8. Probar likes pendientes
+            System.out.println("\n=== LIKES PENDIENTES DE SOFIA ===");
+
+            // Carlos da LIKE a Sofía
+            reaccionService.registrarReaccion(carlos, sofia, TipoReaccion.LIKE);
+            System.out.println("Carlos dio LIKE a Sofía");
+
+            // Diego da LIKE a Sofía
+            reaccionService.registrarReaccion(diego, sofia, TipoReaccion.LIKE);
+            System.out.println("Diego dio LIKE a Sofía");
+
+            // Sofía todavía no responde, así que debe tener 2 pendientes
+            imprimirLikesPendientes(sofia.getId());
+
+            // Sofía responde LIKE a Carlos
+            reaccionService.registrarReaccion(sofia, carlos, TipoReaccion.LIKE);
+            System.out.println("Sofía respondió LIKE a Carlos");
+
+            // Ahora solo Diego debe seguir pendiente
+            System.out.println("\n=== LIKES PENDIENTES DE SOFIA DESPUÉS DE RESPONDER A CARLOS ===");
+            imprimirLikesPendientes(sofia.getId());
+
+            // Sofía responde NO_INTERESA a Diego
+            reaccionService.registrarReaccion(sofia, diego, TipoReaccion.NO_INTERESA);
+            System.out.println("Sofía respondió NO_INTERESA a Diego");
+
+            // Ahora ya no debe tener pendientes
+            System.out.println("\n=== LIKES PENDIENTES DE SOFIA DESPUÉS DE RESPONDER A DIEGO ===");
+            imprimirLikesPendientes(sofia.getId());
+
+            // 9. Ver matches
             System.out.println("\n=== MATCHES DE ANA ===");
             imprimirMatches(ana.getId());
 
@@ -153,7 +183,7 @@ public class main {
             System.out.println("\n=== MATCHES DE SOFIA ===");
             imprimirMatches(sofia.getId());
 
-            // 9. Actualizar perfil
+            // 10. Actualizar perfil
             System.out.println("\n=== ACTUALIZAR PERFIL DE ANA ===");
             estudianteService.actualizarPerfil(
                     ana.getId(),
@@ -163,12 +193,12 @@ public class main {
             );
             imprimirEstudianteConHobbies(ana.getId());
 
-            // 10. Quitar hobby
+            // 11. Quitar hobby
             System.out.println("\n=== QUITAR HOBBY A ANA ===");
             estudianteService.quitarHobby(ana.getId(), cine.getId());
             imprimirEstudianteConHobbies(ana.getId());
 
-            // 11. Desactivar cuenta
+            // 12. Desactivar cuenta
             System.out.println("\n=== DESACTIVAR CUENTA DE SOFIA ===");
             estudianteService.desactivarCuenta(sofia.getId());
             System.out.println("Cuenta de Sofía desactivada");
@@ -306,6 +336,23 @@ public class main {
                     + " | Estudiante 1: " + m.getEstudiante1().getNombre()
                     + " | Estudiante 2: " + m.getEstudiante2().getNombre()
             );
+        }
+    }
+
+    private static void imprimirLikesPendientes(Long idEstudiante) {
+        List<Estudiante> pendientes = reaccionService.obtenerLikesPendientes(idEstudiante);
+        int cantidad = reaccionService.contarLikesPendientes(idEstudiante);
+
+        System.out.println("Cantidad de likes pendientes: " + cantidad);
+
+        if (pendientes.isEmpty()) {
+            System.out.println("No hay likes pendientes.");
+            return;
+        }
+
+        for (Estudiante e : pendientes) {
+            System.out.println("- " + e.getNombre() + " " + e.getApPat()
+                    + " | " + e.getCorreoInst());
         }
     }
 

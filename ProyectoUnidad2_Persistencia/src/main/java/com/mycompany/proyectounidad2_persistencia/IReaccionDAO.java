@@ -6,6 +6,7 @@ package com.mycompany.proyectounidad2_persistencia;
  */
 import com.mycompany.proyectounidad2_dominio.Estudiante;
 import com.mycompany.proyectounidad2_dominio.Reaccion;
+import java.util.List;
 
 /**
  *
@@ -18,5 +19,7 @@ public interface IReaccionDAO {
     Reaccion actualizar(Reaccion reaccion);
 
     Reaccion buscarPorEmisorReceptor(Estudiante emisor, Estudiante receptor);
+
+    List<Estudiante> obtenerLikesPendientes(Long idReceptor);
 
 }

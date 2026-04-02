@@ -18,6 +18,7 @@ import com.mycompany.proyectounidad2_persistencia.ReaccionDAO;
 import com.mycompany.proyectounidad2_utils.JpaUtil;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  *
@@ -118,5 +119,28 @@ public class ReaccionService implements IReaccionService {
                 matchDAO.guardar(nuevoMatch);
             }
         }
+    }
+
+    @Override
+    public List<Estudiante> obtenerLikesPendientes(Long idEstudiante) {
+        if (idEstudiante == null) {
+            throw new ValidacionException("El id del estudiante no puede ser nulo.");
+        }
+
+        EntityManager em = JpaUtil.getEntityManager();
+
+        try {
+            IReaccionDAO reaccionDAO = new ReaccionDAO(em);
+            return reaccionDAO.obtenerLikesPendientes(idEstudiante);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al obtener likes pendientes.", e);
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public int contarLikesPendientes(Long idEstudiante) {
+        return obtenerLikesPendientes(idEstudiante).size();
     }
 }

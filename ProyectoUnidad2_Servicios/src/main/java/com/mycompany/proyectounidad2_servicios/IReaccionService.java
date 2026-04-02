@@ -7,6 +7,7 @@ package com.mycompany.proyectounidad2_servicios;
 import com.mycompany.proyectounidad2_dominio.Estudiante;
 import com.mycompany.proyectounidad2_dominio.Reaccion;
 import com.mycompany.proyectounidad2_dominio.TipoReaccion;
+import java.util.List;
 
 /**
  *
@@ -15,5 +16,9 @@ import com.mycompany.proyectounidad2_dominio.TipoReaccion;
 public interface IReaccionService {
 
     Reaccion registrarReaccion(Estudiante emisor, Estudiante receptor, TipoReaccion tipo);
+
+    List<Estudiante> obtenerLikesPendientes(Long idEstudiante);
+
+    int contarLikesPendientes(Long idEstudiante);
 
 }

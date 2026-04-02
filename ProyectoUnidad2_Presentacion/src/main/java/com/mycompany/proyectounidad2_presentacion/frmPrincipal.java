@@ -5,6 +5,10 @@
 package com.mycompany.proyectounidad2_presentacion;
 
 import com.mycompany.proyectounidad2_dominio.Estudiante;
+import com.mycompany.proyectounidad2_exceptions.NegocioException;
+import com.mycompany.proyectounidad2_servicios.IReaccionService;
+import com.mycompany.proyectounidad2_servicios.ReaccionService;
+import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
@@ -15,6 +19,7 @@ import javax.swing.JOptionPane;
 public class frmPrincipal extends javax.swing.JFrame {
 
     private Estudiante usuarioActual;
+    private IReaccionService reaccionService = new ReaccionService();
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(frmPrincipal.class.getName());
 
@@ -33,6 +38,16 @@ public class frmPrincipal extends javax.swing.JFrame {
         lblFoto.setPreferredSize(new java.awt.Dimension(80, 80));
         lblFoto.setMinimumSize(new java.awt.Dimension(80, 80));
 
+        lblNotificacion.setIcon(cargarIcono("/imagenes/iconos/notificacion.png"));
+        lblNotificacion.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+        lblContador.setOpaque(true);
+        lblContador.setBackground(new java.awt.Color(244, 67, 54));
+        lblContador.setForeground(java.awt.Color.WHITE);
+        lblContador.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblContador.setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.WHITE));
+        lblContador.setPreferredSize(new java.awt.Dimension(20, 20));
+
         btnExplorar.setIcon(cargarIcono("/imagenes/iconos/explorar.png"));
         btnExplorar.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnExplorar.setIconTextGap(15);
@@ -48,6 +63,8 @@ public class frmPrincipal extends javax.swing.JFrame {
         btnCerrarSesion.setIcon(cargarIcono("/imagenes/iconos/logout.png"));
         btnCerrarSesion.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnCerrarSesion.setIconTextGap(15);
+
+        cargarLikesPendientes();
 
     }
 
@@ -68,6 +85,8 @@ public class frmPrincipal extends javax.swing.JFrame {
         btnMatches = new javax.swing.JButton();
         btnPerfil = new javax.swing.JButton();
         btnCerrarSesion = new javax.swing.JButton();
+        lblNotificacion = new javax.swing.JLabel();
+        lblContador = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -117,23 +136,40 @@ public class frmPrincipal extends javax.swing.JFrame {
         btnCerrarSesion.setText("Cerrar Sesión");
         btnCerrarSesion.addActionListener(this::btnCerrarSesionActionPerformed);
 
+        lblNotificacion.setText("Img");
+        lblNotificacion.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblNotificacionMouseClicked(evt);
+            }
+        });
+
+        lblContador.setText("0");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(btnCerrarSesion, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
-                    .addComponent(btnPerfil, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
-                    .addComponent(btnMatches, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
-                    .addComponent(btnExplorar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(48, 48, 48))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblNotificacion)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(btnExplorar, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnMatches, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnCerrarSesion, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lblContador)
+                .addGap(23, 23, 23))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
+                .addContainerGap(21, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblNotificacion)
+                    .addComponent(lblContador))
+                .addGap(18, 18, 18)
                 .addComponent(btnExplorar)
                 .addGap(18, 18, 18)
                 .addComponent(btnMatches)
@@ -141,7 +177,7 @@ public class frmPrincipal extends javax.swing.JFrame {
                 .addComponent(btnPerfil)
                 .addGap(18, 18, 18)
                 .addComponent(btnCerrarSesion)
-                .addContainerGap(41, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -200,6 +236,49 @@ public class frmPrincipal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
 
+    private void lblNotificacionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblNotificacionMouseClicked
+        try {
+            List<Estudiante> pendientes = reaccionService.obtenerLikesPendientes(usuarioActual.getId());
+
+            if (pendientes.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "No tienes likes pendientes.");
+                return;
+            }
+
+            String[] opciones = pendientes.stream()
+                    .map(e -> e.getNombre() + " " + e.getApPat())
+                    .toArray(String[]::new);
+
+            String seleccion = (String) JOptionPane.showInputDialog(
+                    this,
+                    "Selecciona un alumno para responder su like:",
+                    "Likes pendientes",
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    opciones,
+                    opciones[0]
+            );
+
+            if (seleccion == null) {
+                return;
+            }
+
+            Estudiante objetivo = pendientes.stream()
+                    .filter(e -> (e.getNombre() + " " + e.getApPat()).equals(seleccion))
+                    .findFirst()
+                    .orElse(null);
+
+            if (objetivo != null) {
+                frmExplorar frm = new frmExplorar(usuarioActual, objetivo.getId());
+                frm.setVisible(true);
+                this.dispose();
+            }
+
+        } catch (NegocioException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }//GEN-LAST:event_lblNotificacionMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -211,7 +290,9 @@ public class frmPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lblBienvenida;
+    private javax.swing.JLabel lblContador;
     private javax.swing.JLabel lblFoto;
+    private javax.swing.JLabel lblNotificacion;
     // End of variables declaration//GEN-END:variables
 
     private void cargarFotoPerfil(String nombreArchivo) {
@@ -241,6 +322,24 @@ public class frmPrincipal extends javax.swing.JFrame {
 
         lblFoto.revalidate();
         lblFoto.repaint();
+        pack();
+        setLocationRelativeTo(null);
+
+    }
+
+    private void cargarLikesPendientes() {
+        try {
+            int cantidad = reaccionService.contarLikesPendientes(usuarioActual.getId());
+
+            lblContador.setText(String.valueOf(cantidad));
+            lblContador.setVisible(cantidad > 0);
+
+        } catch (Exception e) {
+            lblContador.setText("0");
+            lblContador.setVisible(false);
+        }
+        lblContador.revalidate();
+        lblContador.repaint();
         pack();
         setLocationRelativeTo(null);
 
