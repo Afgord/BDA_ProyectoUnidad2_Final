@@ -18,6 +18,10 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
+ * Formulario de perfil del estudiante.
+ *
+ * Permite: - Visualizar y editar información personal - Agregar o quitar
+ * hobbies - Desactivar la cuenta
  *
  * @author Afgord
  */

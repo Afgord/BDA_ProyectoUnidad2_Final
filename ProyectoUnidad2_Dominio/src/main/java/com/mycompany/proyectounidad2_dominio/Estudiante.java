@@ -19,6 +19,17 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
+ * Representa a un estudiante dentro del sistema.
+ *
+ * Contiene información personal, académica y de perfil, así como sus relaciones
+ * con hobbies.
+ *
+ * Características: - Cada estudiante tiene un correo institucional único -
+ * Puede tener múltiples hobbies (relación muchos a muchos) - Puede ser
+ * desactivado lógicamente (activo = false)
+ *
+ * Esta entidad forma parte del dominio del sistema y es utilizada en
+ * operaciones de registro, autenticación, exploración y matching.
  *
  * @author Afgord
  */
@@ -38,6 +49,10 @@ public class Estudiante implements Serializable {
     private String apPat;
     @Column(name = "ap_mat", nullable = false)
     private String apMat;
+    /**
+     * Correo institucional del estudiante. Debe ser único y cumplir con el
+     * formato establecido.
+     */
     @Column(name = "correo_inst", nullable = false, unique = true)
     private String correoInst;
     @Column(name = "password", nullable = false)
@@ -46,11 +61,27 @@ public class Estudiante implements Serializable {
     private String carrera;
     @Column(name = "foto_perfil")
     private String fotoPerfil;
+    /**
+     * Descripción del perfil del estudiante. Máximo 500 caracteres.
+     */
     @Column(name = "descripcion", length = 500)
     private String descripcion;
+    /**
+     * Indica si la cuenta del estudiante está activa. Se utiliza para
+     * implementar eliminación lógica.
+     */
     @Column(name = "activo", nullable = false)
     private boolean activo = true;
 
+    /**
+     * Conjunto de hobbies asociados al estudiante.
+     *
+     * Se modela como una relación muchos a muchos mediante la tabla intermedia
+     * "estudiante_hobby".
+     *
+     * Se define una restricción única para evitar duplicados (id_estudiante,
+     * id_hobby).
+     */
     @ManyToMany
     @JoinTable(
             name = "estudiante_hobby",
@@ -165,6 +196,9 @@ public class Estudiante implements Serializable {
         this.hobbies = hobbies;
     }
 
+    /**
+     * Calcula el hash basado en el identificador del estudiante.
+     */
     @Override
     public int hashCode() {
         int hash = 0;
@@ -172,6 +206,12 @@ public class Estudiante implements Serializable {
         return hash;
     }
 
+    /**
+     * Compara dos estudiantes basándose en su identificador.
+     *
+     * Nota: Este método depende de que el ID esté asignado, por lo que puede no
+     * funcionar correctamente en entidades no persistidas.
+     */
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -185,6 +225,11 @@ public class Estudiante implements Serializable {
         return true;
     }
 
+    /**
+     * Representación en cadena del estudiante.
+     *
+     * Se omiten datos sensibles como la contraseña.
+     */
     @Override
     public String toString() {
         return "Estudiante{" + "id=" + id + ", nombre=" + nombre + ", apPat=" + apPat + ", apMat=" + apMat + ", correoInst="

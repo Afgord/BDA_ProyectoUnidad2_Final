@@ -15,11 +15,29 @@ import jakarta.persistence.EntityManager;
 import java.util.List;
 
 /**
+ * Implementación de la lógica de negocio para la entidad Hobby.
+ *
+ * Gestiona el registro y consulta de hobbies disponibles en el sistema.
+ *
+ * Aplica validaciones de negocio para evitar registros nulos, nombres vacíos y
+ * duplicidad de hobbies.
  *
  * @author Afgord
  */
 public class HobbyService implements IHobbyService {
 
+    /**
+     * Registra un nuevo hobby en el sistema.
+     *
+     * Realiza las siguientes validaciones: - El objeto hobby no sea nulo - El
+     * nombre del hobby no sea nulo o vacío - El nombre se normaliza (trim y
+     * lowercase) - No exista previamente un hobby con el mismo nombre
+     *
+     * @param hobby hobby a registrar
+     * @return hobby persistido en base de datos
+     * @throws ValidacionException si los datos no cumplen las reglas
+     * @throws ReglaNegocioException si ya existe un hobby con el mismo nombre
+     */
     @Override
     public Hobby registrarHobby(Hobby hobby) {
 
@@ -66,6 +84,16 @@ public class HobbyService implements IHobbyService {
         }
     }
 
+    /**
+     * Busca un hobby por su nombre.
+     *
+     * El nombre es normalizado (trim y lowercase) antes de realizar la
+     * consulta.
+     *
+     * @param nombre nombre del hobby
+     * @return hobby encontrado o null si no existe
+     * @throws ValidacionException si el nombre es nulo o vacío
+     */
     @Override
     public Hobby buscarPorNombre(String nombre) {
         if (nombre == null || nombre.isBlank()) {
@@ -84,6 +112,11 @@ public class HobbyService implements IHobbyService {
         }
     }
 
+    /**
+     * Obtiene todos los hobbies registrados en el sistema.
+     *
+     * @return lista de hobbies disponibles
+     */
     @Override
     public List<Hobby> obtenerTodos() {
         EntityManager em = JpaUtil.getEntityManager();
@@ -96,6 +129,15 @@ public class HobbyService implements IHobbyService {
         }
     }
 
+    /**
+     * Valida los datos básicos requeridos para un hobby.
+     *
+     * Verifica: - Que el objeto hobby no sea nulo - Que el nombre no sea nulo o
+     * vacío
+     *
+     * @param hobby hobby a validar
+     * @throws ValidacionException si los datos son inválidos
+     */
     private void validarDatosHobby(Hobby hobby) {
         if (hobby == null) {
             throw new ValidacionException("El hobby no puede ser nulo.");

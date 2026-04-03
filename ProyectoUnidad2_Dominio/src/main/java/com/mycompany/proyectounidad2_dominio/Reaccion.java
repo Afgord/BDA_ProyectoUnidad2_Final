@@ -19,10 +19,24 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
+ * Representa una reacción entre dos estudiantes dentro del sistema.
+ *
+ * Una reacción modela la interacción de un estudiante emisor hacia un
+ * estudiante receptor, pudiendo ser de tipo LIKE o NO_INTERESA.
+ *
+ * Características: - Relación recursiva hacia la entidad Estudiante -
+ * Restricción única por par emisor-receptor - Registro de fecha de la reacción
+ *
+ * Esta entidad es la base para la generación automática de matches cuando
+ * existe interés mutuo entre dos estudiantes.
  *
  * @author Afgord
  */
 @Entity
+/**
+ * Se define una restricción única sobre (id_emisor, id_receptor) para evitar
+ * múltiples reacciones del mismo estudiante hacia el mismo receptor.
+ */
 @Table(name = "reaccion",
         uniqueConstraints = {
             @UniqueConstraint(columnNames = {"id_emisor", "id_receptor"})
@@ -35,17 +49,32 @@ public class Reaccion implements Serializable {
     @Column(name = "id_reaccion")
     private Long id;
 
+    /**
+     * Tipo de reacción emitida por el estudiante.
+     *
+     * Se almacena como texto en base de datos para mejorar legibilidad y evitar
+     * dependencia del orden ordinal del enum.
+     */
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo", nullable = false)
     private TipoReaccion tipo;
 
+    /**
+     * Fecha en la que se registró o actualizó la reacción.
+     */
     @Column(name = "fecha", nullable = false)
     private LocalDate fecha;
 
+    /**
+     * Estudiante que emite la reacción.
+     */
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_emisor", nullable = false)
     private Estudiante emisor;
 
+    /**
+     * Estudiante que recibe la reacción.
+     */
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_receptor", nullable = false)
     private Estudiante receptor;
@@ -100,6 +129,9 @@ public class Reaccion implements Serializable {
         this.receptor = receptor;
     }
 
+    /**
+     * Calcula el hash basado en el identificador de la reacción.
+     */
     @Override
     public int hashCode() {
         int hash = 0;
@@ -107,6 +139,12 @@ public class Reaccion implements Serializable {
         return hash;
     }
 
+    /**
+     * Compara dos reacciones basándose en su identificador.
+     *
+     * Nota: Este método depende de que el ID esté asignado, por lo que puede no
+     * comportarse como se espera en entidades no persistidas.
+     */
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -120,6 +158,12 @@ public class Reaccion implements Serializable {
         return true;
     }
 
+    /**
+     * Representación en cadena de la reacción.
+     *
+     * Incluye únicamente datos generales de identificación y omite referencias
+     * completas a emisor y receptor para evitar salidas extensas o recursivas.
+     */
     @Override
     public String toString() {
         return "Reaccion{" + "id=" + id + ", tipo=" + tipo + ", fecha=" + fecha + '}';

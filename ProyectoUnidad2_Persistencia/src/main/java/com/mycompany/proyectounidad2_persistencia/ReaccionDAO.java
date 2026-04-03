@@ -12,6 +12,10 @@ import jakarta.persistence.TypedQuery;
 import java.util.List;
 
 /**
+ * Implementación del acceso a datos para la entidad Reaccion.
+ *
+ * Permite persistir, actualizar, consultar y eliminar reacciones entre
+ * estudiantes, así como obtener los likes pendientes de respuesta.
  *
  * @author Afgord
  */
@@ -23,17 +27,36 @@ public class ReaccionDAO implements IReaccionDAO {
         this.em = em;
     }
 
+    /**
+     * Persiste una nueva reacción en la base de datos.
+     *
+     * @param reaccion reacción a guardar
+     * @return reacción persistida
+     */
     @Override
     public Reaccion guardar(Reaccion reaccion) {
         em.persist(reaccion);
         return reaccion;
     }
 
+    /**
+     * Actualiza una reacción existente en la base de datos.
+     *
+     * @param reaccion reacción con datos actualizados
+     * @return reacción actualizada
+     */
     @Override
     public Reaccion actualizar(Reaccion reaccion) {
         return em.merge(reaccion);
     }
 
+    /**
+     * Busca una reacción específica entre un estudiante emisor y un receptor.
+     *
+     * @param emisor estudiante que emite la reacción
+     * @param receptor estudiante que recibe la reacción
+     * @return reacción encontrada o null si no existe
+     */
     @Override
     public Reaccion buscarPorEmisorReceptor(Estudiante emisor, Estudiante receptor) {
         String jpql = """
@@ -50,6 +73,15 @@ public class ReaccionDAO implements IReaccionDAO {
         return query.getResultStream().findFirst().orElse(null);
     }
 
+    /**
+     * Obtiene los estudiantes que han dado LIKE al receptor y que aún no han
+     * recibido una respuesta por parte de este.
+     *
+     * El resultado se limita a un máximo de 100 registros.
+     *
+     * @param idReceptor id del estudiante receptor
+     * @return lista de estudiantes emisores con likes pendientes
+     */
     @Override
     public List<Estudiante> obtenerLikesPendientes(Long idReceptor) {
         String jpql = """
@@ -73,11 +105,24 @@ public class ReaccionDAO implements IReaccionDAO {
         return query.getResultList();
     }
 
+    /**
+     * Busca una reacción por su identificador.
+     *
+     * @param id identificador de la reacción
+     * @return reacción encontrada o null si no existe
+     */
     @Override
     public Reaccion buscarPorId(Long id) {
         return em.find(Reaccion.class, id);
     }
 
+    /**
+     * Obtiene la lista de reacciones registradas en el sistema.
+     *
+     * El resultado se limita a un máximo de 100 registros.
+     *
+     * @return lista de reacciones
+     */
     @Override
     public List<Reaccion> listar() {
         String jpql = """
@@ -91,6 +136,12 @@ public class ReaccionDAO implements IReaccionDAO {
         return query.getResultList();
     }
 
+    /**
+     * Elimina una reacción existente de la base de datos.
+     *
+     * @param reaccion reacción a eliminar
+     * @return reacción eliminada
+     */
     @Override
     public Reaccion eliminar(Reaccion reaccion) {
         reaccion = em.merge(reaccion);

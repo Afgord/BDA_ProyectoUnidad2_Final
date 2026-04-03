@@ -16,6 +16,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
+ * Representa un hobby dentro del sistema.
+ *
+ * Los hobbies forman un catálogo reutilizable que puede ser asociado a
+ * múltiples estudiantes mediante una relación muchos a muchos.
+ *
+ * Características: - Cada hobby tiene un nombre único - Puede estar asociado a
+ * múltiples estudiantes - No se elimina normalmente, solo se remueven
+ * relaciones
  *
  * @author Afgord
  */
@@ -29,12 +37,31 @@ public class Hobby implements Serializable {
     @Column(name = "id_hobby")
     private Long id;
 
+    /**
+     * Nombre del hobby.
+     *
+     * Debe ser único para evitar duplicados en el catálogo.
+     */
     @Column(name = "nombre", nullable = false, unique = true)
     private String nombre;
 
+    /**
+     * Descripción opcional del hobby.
+     *
+     * Máximo 500 caracteres.
+     */
     @Column(name = "descripcion", length = 500)
     private String descripcion;
 
+    /**
+     * Conjunto de estudiantes asociados a este hobby.
+     *
+     * Relación inversa de la asociación muchos a muchos definida en la entidad
+     * Estudiante.
+     *
+     * Se utiliza "mappedBy" porque la tabla intermedia es gestionada desde
+     * Estudiante.
+     */
     @ManyToMany(mappedBy = "hobbies")
     private Set<Estudiante> estudiantes = new HashSet<>();
 
@@ -78,6 +105,9 @@ public class Hobby implements Serializable {
         this.estudiantes = estudiantes;
     }
 
+    /**
+     * Calcula el hash basado en el identificador del hobby.
+     */
     @Override
     public int hashCode() {
         int hash = 0;
@@ -85,6 +115,12 @@ public class Hobby implements Serializable {
         return hash;
     }
 
+    /**
+     * Compara dos hobbies basándose en su identificador.
+     *
+     * Nota: Este método depende de que el ID esté asignado, por lo que puede no
+     * comportarse como se espera en entidades no persistidas.
+     */
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -98,6 +134,12 @@ public class Hobby implements Serializable {
         return true;
     }
 
+    /**
+     * Representación en cadena del hobby.
+     *
+     * Incluye información básica y evita referencias a estudiantes para
+     * prevenir salidas extensas o recursivas.
+     */
     @Override
     public String toString() {
         return "Hobby{" + "id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + '}';

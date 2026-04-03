@@ -21,11 +21,34 @@ import jakarta.persistence.EntityManager;
 import java.util.List;
 
 /**
+ * Implementación de la lógica de negocio para la entidad Estudiante.
+ *
+ * Esta clase gestiona: - Registro de estudiantes - Autenticación (inicio de
+ * sesión) - Administración de perfil - Gestión de hobbies - Exploración de
+ * perfiles - Desactivación de cuentas
+ *
+ * Aplica validaciones de negocio, control de transacciones y coordinación con
+ * la capa de persistencia.
  *
  * @author Afgord
  */
 public class EstudianteService implements IEstudianteService {
 
+    /**
+     * Registra un nuevo estudiante en el sistema.
+     *
+     * Realiza las siguientes validaciones: - El objeto estudiante no sea nulo -
+     * Normaliza el correo institucional (trim y lowercase) - Valida datos
+     * obligatorios y formato de correo institucional - Verifica que no exista
+     * otro estudiante con el mismo correo
+     *
+     * La contraseña es encriptada antes de persistirse.
+     *
+     * @param estudiante objeto con los datos del estudiante a registrar
+     * @return estudiante persistido en base de datos
+     * @throws ValidacionException si los datos no cumplen las reglas
+     * @throws ReglaNegocioException si el correo ya está registrado
+     */
     @Override
     public Estudiante registrarEstudiante(Estudiante estudiante) {
 
@@ -78,6 +101,15 @@ public class EstudianteService implements IEstudianteService {
         }
     }
 
+    /**
+     * Busca un estudiante por su correo institucional.
+     *
+     * El correo es normalizado (trim y lowercase) antes de la consulta.
+     *
+     * @param correoInst correo institucional
+     * @return estudiante encontrado o null si no existe
+     * @throws ValidacionException si el correo es nulo o vacío
+     */
     @Override
     public Estudiante buscarPorCorreo(String correoInst) {
         if (correoInst == null || correoInst.isBlank()) {
@@ -132,6 +164,21 @@ public class EstudianteService implements IEstudianteService {
         }
     }
 
+    /**
+     * Permite a un estudiante iniciar sesión en el sistema.
+     *
+     * Valida: - Que el correo y contraseña no sean nulos o vacíos - Que el
+     * estudiante exista - Que la cuenta esté activa - Que la contraseña
+     * coincida (usando hash)
+     *
+     * @param correoInst correo institucional del estudiante
+     * @param password contraseña en texto plano
+     * @return estudiante autenticado
+     * @throws ValidacionException si los datos son inválidos
+     * @throws RecursoNoEncontradoException si el estudiante no existe
+     * @throws ReglaNegocioException si la cuenta está desactivada
+     * @throws AutenticacionException si la contraseña es incorrecta
+     */
     @Override
     public Estudiante iniciarSesion(String correoInst, String password) {
         if (correoInst == null || correoInst.isBlank()) {
@@ -172,6 +219,18 @@ public class EstudianteService implements IEstudianteService {
         }
     }
 
+    /**
+     * Asigna un hobby a un estudiante.
+     *
+     * Valida: - Existencia del estudiante - Existencia del hobby - Que el hobby
+     * no esté ya asignado al estudiante
+     *
+     * @param idEstudiante id del estudiante
+     * @param idHobby id del hobby a asignar
+     * @return estudiante actualizado
+     * @throws ValidacionException si los ids son inválidos
+     * @throws ReglaNegocioException si el hobby ya está asignado
+     */
     @Override
     public Estudiante agregarHobby(Long idEstudiante, Long idHobby) {
         if (idEstudiante == null) {
@@ -223,6 +282,14 @@ public class EstudianteService implements IEstudianteService {
         }
     }
 
+    /**
+     * Busca un estudiante por su identificador.
+     *
+     * @param id identificador del estudiante
+     * @return estudiante encontrado
+     * @throws ValidacionException si el id es nulo
+     * @throws RecursoNoEncontradoException si no existe el estudiante
+     */
     @Override
     public Estudiante buscarPorId(Long id) {
         if (id == null) {
@@ -245,6 +312,17 @@ public class EstudianteService implements IEstudianteService {
         }
     }
 
+    /**
+     * Busca un estudiante por su identificador cargando sus hobbies.
+     *
+     * Valida que el estudiante exista y esté activo.
+     *
+     * @param id identificador del estudiante
+     * @return estudiante con hobbies cargados
+     * @throws ValidacionException si el id es nulo
+     * @throws RecursoNoEncontradoException si no existe
+     * @throws ReglaNegocioException si la cuenta está desactivada
+     */
     @Override
     public Estudiante buscarPorIdConHobbies(Long id) {
         if (id == null) {
@@ -273,6 +351,16 @@ public class EstudianteService implements IEstudianteService {
         }
     }
 
+    /**
+     * Obtiene estudiantes que comparten al menos un hobby con el estudiante
+     * indicado.
+     *
+     * @param idEstudiante id del estudiante base
+     * @return lista de estudiantes con hobbies en común
+     * @throws ValidacionException si el id es nulo
+     * @throws RecursoNoEncontradoException si el estudiante no existe o está
+     * inactivo
+     */
     @Override
     public List<Estudiante> buscarConHobbiesEnComun(Long idEstudiante) {
         if (idEstudiante == null) {
@@ -293,6 +381,18 @@ public class EstudianteService implements IEstudianteService {
         }
     }
 
+    /**
+     * Obtiene una lista de perfiles disponibles para explorar.
+     *
+     * Se excluyen: - El propio estudiante - Estudiantes inactivos - Estudiantes
+     * a los que ya se les ha dado reacción (LIKE o NO_INTERESA)
+     *
+     * @param idEstudiante identificador del estudiante actual
+     * @return lista de estudiantes disponibles para explorar
+     * @throws ValidacionException si el id es nulo
+     * @throws RecursoNoEncontradoException si el estudiante no existe o está
+     * inactivo
+     */
     @Override
     public List<Estudiante> explorarPerfiles(Long idEstudiante) {
         if (idEstudiante == null) {
@@ -313,6 +413,16 @@ public class EstudianteService implements IEstudianteService {
         }
     }
 
+    /**
+     * Elimina un hobby del listado de un estudiante.
+     *
+     * El hobby no se elimina del sistema, solo se remueve la relación.
+     *
+     * @param idEstudiante id del estudiante
+     * @param idHobby id del hobby a remover
+     * @return estudiante actualizado
+     * @throws ReglaNegocioException si el estudiante no tiene ese hobby
+     */
     @Override
     public Estudiante quitarHobby(Long idEstudiante, Long idHobby) {
         if (idEstudiante == null) {
@@ -371,6 +481,21 @@ public class EstudianteService implements IEstudianteService {
         }
     }
 
+    /**
+     * Actualiza la información del perfil de un estudiante.
+     *
+     * Permite modificar: - Carrera - Descripción (máx. 500 caracteres) - Foto
+     * de perfil
+     *
+     * Solo se actualizan los campos que no son nulos o vacíos.
+     *
+     * @param idEstudiante id del estudiante
+     * @param carrera nueva carrera
+     * @param descripcion nueva descripción
+     * @param fotoPerfil nueva ruta de imagen
+     * @return estudiante actualizado
+     * @throws ValidacionException si los datos son inválidos
+     */
     @Override
     public Estudiante actualizarPerfil(Long idEstudiante, String carrera, String descripcion, String fotoPerfil) {
         if (idEstudiante == null) {
@@ -422,6 +547,16 @@ public class EstudianteService implements IEstudianteService {
         }
     }
 
+    /**
+     * Desactiva la cuenta de un estudiante.
+     *
+     * Se realiza una eliminación lógica cambiando el atributo "activo" a false.
+     *
+     * @param idEstudiante id del estudiante
+     * @throws ValidacionException si el id es nulo
+     * @throws RecursoNoEncontradoException si no existe el estudiante
+     * @throws ReglaNegocioException si la cuenta ya está desactivada
+     */
     @Override
     public void desactivarCuenta(Long idEstudiante) {
         if (idEstudiante == null) {
@@ -464,20 +599,42 @@ public class EstudianteService implements IEstudianteService {
         }
     }
 
-//    private boolean esCorreoInstitucionalValido(String correo) {
-//        return correo != null
-//                && correo.matches("^[A-Za-z0-9._%+-]+@potros\\.itson\\.edu\\.mx$");
-//    }
+    /**
+     * Valida que el correo cumpla con el formato institucional.
+     *
+     * @param correo correo a validar
+     * @return true si es válido, false en caso contrario
+     */
     private boolean esCorreoInstitucionalValido(String correo) {
         return correo != null
                 && correo.matches("^[A-Za-z0-9]+([._%+-]?[A-Za-z0-9]+)*@potros\\.itson\\.edu\\.mx$");
     }
 
+    /**
+     * Valida que la contraseña cumpla con los requisitos de seguridad: - mínimo
+     * 6 caracteres - al menos una mayúscula - al menos una minúscula - al menos
+     * un número
+     *
+     * @param password contraseña a validar
+     * @return true si es válida, false en caso contrario
+     */
     private boolean esPasswordRobusto(String password) {
         return password != null
                 && password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{6,}$");
     }
 
+    /**
+     * Obtiene un estudiante por su id y valida que esté activo.
+     *
+     * Método reutilizable para centralizar la validación de existencia y estado
+     * de la cuenta.
+     *
+     * @param estudianteDAO acceso a datos de estudiantes
+     * @param idEstudiante id del estudiante
+     * @return estudiante activo
+     * @throws RecursoNoEncontradoException si no existe
+     * @throws ReglaNegocioException si está desactivado
+     */
     private Estudiante obtenerEstudianteActivoPorId(IEstudianteDAO estudianteDAO, Long idEstudiante) {
         Estudiante estudiante = estudianteDAO.buscarPorId(idEstudiante);
 

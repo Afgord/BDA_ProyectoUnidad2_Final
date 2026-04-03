@@ -26,6 +26,13 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 /**
+ * /**
+ * Formulario encargado de mostrar perfiles disponibles para explorar.
+ *
+ * Permite al usuario: - Ver información de otros estudiantes - Dar LIKE o NO
+ * INTERESA
+ *
+ * La lista se actualiza dinámicamente después de cada reacción.
  *
  * @author Afgord
  */

@@ -15,6 +15,10 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
+ * Formulario que muestra los matches del usuario.
+ *
+ * Un match se genera cuando dos estudiantes se dan LIKE mutuamente.
+ *
  * @author Afgord
  */
 public class frmMatches extends javax.swing.JFrame {

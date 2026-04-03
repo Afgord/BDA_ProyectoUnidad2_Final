@@ -5,6 +5,13 @@
 package com.mycompany.proyectounidad2_exceptions;
 
 /**
+ * Excepción utilizada para errores de autenticación en el sistema.
+ *
+ * Se lanza cuando ocurre un problema al intentar iniciar sesión, por ejemplo: -
+ * Contraseña incorrecta - Credenciales inválidas
+ *
+ * Forma parte de la jerarquía de excepciones de negocio, extendiendo de
+ * NegocioException.
  *
  * @author Afgord
  */
