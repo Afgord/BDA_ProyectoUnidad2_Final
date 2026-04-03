@@ -10,7 +10,7 @@
       <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/ProyectoUnidad2?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
       <property name="jakarta.persistence.jdbc.user" value="root"/>
       <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
-      <property name="jakarta.persistence.jdbc.password" value="z3M1n07e"/>
+      <property name="jakarta.persistence.jdbc.password" value=""/>
       <property name="hibernate.cache.provider_class" value="org.hibernate.cache.NoCacheProvider"/>
       <property name="jakarta.persistence.schema-generation.database.action" value="update"/>
     </properties>
