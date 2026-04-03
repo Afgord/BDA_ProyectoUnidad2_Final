@@ -129,17 +129,37 @@ public class EstudianteService implements IEstudianteService {
     }
 
     private void validarDatosEstudiante(Estudiante estudiante) {
+
+        if (estudiante == null) {
+            throw new ValidacionException("El estudiante no puede ser nulo.");
+        }
+
         if (estudiante.getNombre() == null || estudiante.getNombre().isBlank()) {
             throw new ValidacionException("El nombre no puede ser nulo o vacío.");
         }
+        String nombre = estudiante.getNombre().trim().replaceAll("\\s+", " ");
+        if (!nombre.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$")) {
+            throw new ValidacionException("El nombre solo puede contener letras y espacios.");
+        }
+        estudiante.setNombre(nombre);
 
         if (estudiante.getApPat() == null || estudiante.getApPat().isBlank()) {
             throw new ValidacionException("El apellido paterno no puede ser nulo o vacío.");
         }
+        String apPat = estudiante.getApPat().trim().replaceAll("\\s+", " ");
+        if (!apPat.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$")) {
+            throw new ValidacionException("El apellido paterno solo puede contener letras y espacios.");
+        }
+        estudiante.setApPat(apPat);
 
         if (estudiante.getApMat() == null || estudiante.getApMat().isBlank()) {
             throw new ValidacionException("El apellido materno no puede ser nulo o vacío.");
         }
+        String apMat = estudiante.getApMat().trim().replaceAll("\\s+", " ");
+        if (!apMat.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$")) {
+            throw new ValidacionException("El apellido materno solo puede contener letras y espacios.");
+        }
+        estudiante.setApMat(apMat);
 
         if (estudiante.getCorreoInst() == null || estudiante.getCorreoInst().isBlank()) {
             throw new ValidacionException("El correo institucional no puede ser nulo o vacío.");
@@ -648,5 +668,4 @@ public class EstudianteService implements IEstudianteService {
 
         return estudiante;
     }
-
 }
