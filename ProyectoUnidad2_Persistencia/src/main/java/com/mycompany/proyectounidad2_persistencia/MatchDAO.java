@@ -85,8 +85,10 @@ public class MatchDAO implements IMatchDAO {
         FROM Match m
         JOIN FETCH m.estudiante1
         JOIN FETCH m.estudiante2
-        WHERE m.estudiante1.id = :id
-           OR m.estudiante2.id = :id
+        WHERE (m.estudiante1.id = :id
+           OR m.estudiante2.id = :id)
+                      AND m.estudiante1.activo = true
+                      AND m.estudiante2.activo = true
     """;
 
         TypedQuery<Match> query = em.createQuery(jpql, Match.class);

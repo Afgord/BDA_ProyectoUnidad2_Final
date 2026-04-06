@@ -133,10 +133,10 @@ JOIN estudiante e1 ON m.estudiante1_id = e1.id_estudiante
 JOIN estudiante e2 ON m.estudiante2_id = e2.id_estudiante
 ORDER BY m.id_match;
 
-DELETE FROM matches
-WHERE id_match = 2;
+-- BUSCAR AL JONAS Desactivado
+SELECT e.id_estudiante, e.correo_inst, e.activo FROM estudiante e WHERE e.nombre = "Jonas Punker";
 
-INSERT INTO estudiante_hobby (id_estudiante, id_hobby) VALUES (1, 1);
-INSERT INTO estudiante_hobby (id_estudiante, id_hobby) VALUES (1, 3);
-
-select e.correo_inst from estudiante e;
+-- Activar cuenta
+UPDATE estudiante
+SET activo = 1
+WHERE id_estudiante = 51;
