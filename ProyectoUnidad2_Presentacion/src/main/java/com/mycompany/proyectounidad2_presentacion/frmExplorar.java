@@ -368,6 +368,11 @@ public class frmExplorar extends javax.swing.JFrame {
         try {
             List<Estudiante> compatibles = estudianteService.buscarConHobbiesEnComun(usuarioActual.getId());
             List<Estudiante> explorables = estudianteService.explorarPerfiles(usuarioActual.getId());
+            // Agregamos este Set para no permitir en frmExplorar los perfiles ya matcheados por el alumno.
+            Set<Long> idsExplorables = explorables.stream()
+                    .map(Estudiante::getId)
+                    .collect(Collectors.toSet());
+
             List<Match> matches = matchService.obtenerMatchesDeEstudiante(usuarioActual.getId());
 
             Set<Long> idsConMatch = new HashSet<>();
@@ -381,9 +386,15 @@ public class frmExplorar extends javax.swing.JFrame {
 
             Map<Long, Estudiante> mapa = new LinkedHashMap<>();
 
-            // Primero compatibles
+            // Primero compatibles ::: Version original
+//            for (Estudiante e : compatibles) {
+//                if (!idsConMatch.contains(e.getId())) {
+//                    mapa.put(e.getId(), e);
+//                }
+//            }
+            //  Versión corregida
             for (Estudiante e : compatibles) {
-                if (!idsConMatch.contains(e.getId())) {
+                if (!idsConMatch.contains(e.getId()) && idsExplorables.contains(e.getId())) {
                     mapa.put(e.getId(), e);
                 }
             }

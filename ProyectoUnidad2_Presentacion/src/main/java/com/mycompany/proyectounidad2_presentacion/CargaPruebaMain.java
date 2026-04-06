@@ -28,6 +28,7 @@ public class CargaPruebaMain {
     private static final MatchService matchService = new MatchService();
 
     private static final Random random = new Random();
+    private static final String PASSWORD_PRUEBA = "z3M1n07e";
 
     public static void main(String[] args) {
         System.out.println("======================================");
@@ -103,17 +104,22 @@ public class CargaPruebaMain {
     private static List<Estudiante> crear50Estudiantes() {
         String[] nombres = {
             "Juan", "María", "Carlos", "Ana", "Luis",
-            "Sofía", "Diego", "Elena", "José", "Fernanda"
+            "Sofía", "Diego", "Elena", "José", "Fernanda",
+            "Mario", "Eduardo", "Christian", "Dolores", "Minerva",
+            "Jessica", "Marcelino", "Karen", "Jonathan", "Ada"
         };
 
         String[] apellidosP = {
             "López", "Martínez", "García", "Hernández", "Ramírez",
-            "Navarro", "Mendoza", "Torres", "Pérez", "Ruiz"
+            "Navarro", "Mendoza", "Torres", "Pérez", "Ruiz",
+            "Robles", "Miranda", "Gil", "Loera", "Niebla",
+            "Ronau", "Gaspar", "Muller", "Lozano", "Laurean"
         };
 
         String[] apellidosM = {
             "Gómez", "Castro", "Flores", "Vega", "Morales",
-            "Ortega", "Silva", "Cruz", "Reyes", "Santos"
+            "Ortega", "Silva", "Cruz", "Reyes", "Santos",
+            "Carrazco", "Cortés", "Gutiérrez"
         };
 
         List<Estudiante> estudiantes = new ArrayList<>();
@@ -127,7 +133,7 @@ public class CargaPruebaMain {
                 e.setApPat(apellidosP[(i - 1) % apellidosP.length]);
                 e.setApMat(apellidosM[(i - 1) % apellidosM.length]);
                 e.setCorreoInst(correo);
-                e.setPassword("Alumno" + i + "A1");
+                e.setPassword(PASSWORD_PRUEBA);
                 e.setCarrera(obtenerCarreraAleatoria());
                 e.setDescripcion("Perfil de prueba del alumno " + i);
                 e.setFotoPerfil("default.jpg");
@@ -244,7 +250,16 @@ public class CargaPruebaMain {
             "Ingeniería Industrial",
             "Ingeniería en Sistemas",
             "Administración",
-            "Contaduría"
+            "Contaduría",
+            "Gastronomía",
+            "Psicología",
+            "Ciencias del Ejercicio Físico",
+            "Veterinaria",
+            "Biotecnología",
+            "Turismo",
+            "Electrónica",
+            "Mecatrónica",
+            "Industrial"
         };
 
         return carreras[random.nextInt(carreras.length)];

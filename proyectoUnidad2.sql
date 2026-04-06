@@ -2,9 +2,6 @@ create database ProyectoUnidad2;
 
 use ProyectoUnidad2;
 
-select * from estudiante;
-select * from reaccion join estudiante limit 5;
-
 DROP DATABASE ProyectoUnidad2;
 
 --  CONSULTAS
@@ -141,3 +138,5 @@ WHERE id_match = 2;
 
 INSERT INTO estudiante_hobby (id_estudiante, id_hobby) VALUES (1, 1);
 INSERT INTO estudiante_hobby (id_estudiante, id_hobby) VALUES (1, 3);
+
+select e.correo_inst from estudiante e;
